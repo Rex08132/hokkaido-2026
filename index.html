@@ -140,7 +140,7 @@
   .timeline::before {
     content: '';
     position: absolute;
-    left: 68px;
+    left: 84px;
     top: 0;
     bottom: 0;
     width: 2px;
@@ -150,37 +150,41 @@
   .tl-item {
     display: flex;
     gap: 0;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     position: relative;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
+  /* ── 時間欄：放大、醒目 ── */
   .tl-time {
-    width: 68px;
+    width: 84px;
     flex-shrink: 0;
     padding-top: 2px;
-    padding-right: 12px;
+    padding-right: 10px;
     text-align: right;
-    font-size: 13px;
+    font-size: 15px;
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-weight: 600;
-    color: var(--ink-soft);
-    line-height: 1.3;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
   }
 
   .tl-dot {
-    width: 14px;
+    width: 16px;
     flex-shrink: 0;
     display: flex;
     justify-content: center;
-    padding-top: 5px;
+    padding-top: 6px;
     position: relative;
     z-index: 1;
   }
 
   .tl-dot::after {
     content: '';
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: var(--accent);
     border: 2px solid #fff;
@@ -195,19 +199,19 @@
   }
 
   .spot-name {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     font-family: "Helvetica Neue", "Arial", "Noto Sans TC", sans-serif;
     color: var(--ink);
     line-height: 1.3;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
 
   .spot-desc {
-    font-size: 14.5px;
+    font-size: 13.5px;
     color: var(--ink-mid);
-    line-height: 1.7;
-    margin-bottom: 8px;
+    line-height: 1.65;
+    margin-bottom: 7px;
   }
 
   /* ===== 導航 Badge ===== */
@@ -409,34 +413,91 @@
 
   /* ===== 列印設定 ===== */
   @media print {
-    body {
-      background: #fff;
-      font-size: 20px;
+
+    /* ─ 全域列印基礎 ─ */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
-    .page {
-      width: 210mm;
-      height: 297mm;
-      min-height: unset;
-      max-height: 297mm;
+    html, body {
+      background: #ffffff !important;
+      font-size: 14px;
       margin: 0;
-      box-shadow: none;
-      page-break-after: always;
-      overflow: hidden;
-    }
-
-    .page:last-child {
-      page-break-after: avoid;
+      padding: 0;
     }
 
     @page {
       size: A4 portrait;
-      margin: 0;
+      margin: 1.5cm;
     }
 
-    .notes-line {
-      height: 28px;
+    /* ─ 每個 .page 容器：自然高度，強制從新頁開始 ─ */
+    .page {
+      width: 100%;
+      min-height: unset;
+      max-height: unset;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      overflow: visible;
+      /* 每頁都從新的一頁開始，且不在頁面中間被切斷 */
+      page-break-before: always;
+      break-before: always;
+      page-break-after: always;
+      break-after: always;
     }
+
+    /* 第一頁不需要在它之前強制換頁 */
+    .page:first-child {
+      page-break-before: avoid;
+      break-before: avoid;
+    }
+
+    /* ─ 頁首區塊：不被切斷 ─ */
+    .page-header {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    /* ─ 時間軸每個項目：不被切斷 ─ */
+    .tl-item {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* ─ 自駕路段框：不被切斷 ─ */
+    .drive-card {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* ─ 頁尾：不被切斷 ─ */
+    .page-footer {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* ─ 航班卡片、行李提醒框：不被切斷 ─ */
+    .flight-card,
+    .checklist-warning,
+    table,
+    tr {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* ─ 表格不跨頁 ─ */
+    table { border-collapse: collapse; }
+
+    /* ─ 筆記線高度 ─ */
+    .notes-line { height: 26px; }
+
+    /* ─ 螢幕陰影清除 ─ */
+    * { box-shadow: none !important; }
   }
 
   /* ===== 響應式螢幕預覽 ===== */
@@ -560,17 +621,6 @@
 
   <!-- 頁尾 -->
   <div class="page-footer" style="margin-top:auto;">
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <div class="mile-chip">🛫 &nbsp;去程 IT260 &nbsp;|&nbsp; KHH → CTS</div>
-      <div class="mile-chip">🛬 &nbsp;回程 IT261 &nbsp;|&nbsp; CTS → KHH</div>
-      <div class="mile-chip">📅 &nbsp;旅遊日期 5/9–5/19 共 11 天</div>
-    </div>
-    <div class="notes-section" style="margin-top:12px;">
-      <div class="notes-title">Notes &nbsp;／&nbsp; 行前備忘</div>
-      <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
-      </div>
-    </div>
   </div>
 
 </div><!-- /flight-page -->
@@ -2369,17 +2419,6 @@
   </div><!-- /page-body -->
 
   <div class="page-footer" style="margin-top:12px;">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-      <div class="mile-chip">✈ 出發日：2026 / 5 / 9</div>
-      <div class="mile-chip">🔋 行動電源隨身攜帶，不可托運</div>
-      <div class="mile-chip">💧 液體 &gt;100ml 托運</div>
-    </div>
-    <div class="notes-section">
-      <div class="notes-title">Notes &nbsp;／&nbsp; 行前備忘事項</div>
-      <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
-      </div>
-    </div>
   </div>
 
 </div><!-- /packing-page -->
