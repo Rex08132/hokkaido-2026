@@ -449,6 +449,133 @@
 </head>
 <body>
 
+<!-- ======================== 航班總覽頁 ======================== -->
+<div class="page" id="flight-page">
+  <div class="page-header" style="padding:26px 32px 22px;">
+    <div class="header-top">
+      <div>
+        <div class="day-label" style="letter-spacing:0.25em;">Flight Overview &nbsp;·&nbsp; 航班與機場動線總覽</div>
+        <div class="day-title" style="font-size:24px;margin-top:4px;">✈ 台灣虎航 Tiger Air Taiwan</div>
+        <div class="day-date" style="margin-top:5px;">2026年 5月 9日（六） 出發 ／ 5月 19日（二） 返台</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:10px 18px;text-align:center;flex-shrink:0;">
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);font-family:'Helvetica Neue',sans-serif;text-transform:uppercase;">全程天數</div>
+        <div style="font-size:28px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:#fff;line-height:1.1;">11<span style="font-size:14px;font-weight:400;">天</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" style="padding:24px 32px 0;">
+
+    <!-- ── 去程 ── -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:10px;">OUTBOUND FLIGHT &nbsp;／&nbsp; 去程</div>
+      <div style="background:#f5f9ff;border:2px solid #3a6fd8;border-radius:12px;padding:18px 24px;display:flex;align-items:center;gap:0;">
+        <!-- 出發 -->
+        <div style="flex:1;text-align:center;">
+          <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">出發 Departure</div>
+          <div style="font-size:46px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:#1a1a2e;line-height:1;letter-spacing:-2px;">08:00</div>
+          <div style="font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;color:#333;margin-top:6px;">高雄小港機場</div>
+          <div style="font-size:13px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;">KHH · Terminal</div>
+        </div>
+        <!-- 中間航班資訊 -->
+        <div style="flex:1;text-align:center;padding:0 12px;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#3a6fd8;font-family:'Helvetica Neue',sans-serif;margin-bottom:4px;">IT 260</div>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <div style="height:2px;flex:1;background:linear-gradient(90deg,#3a6fd8,#c0392b);border-radius:2px;"></div>
+            <span style="font-size:20px;">✈</span>
+            <div style="height:2px;flex:1;background:linear-gradient(90deg,#c0392b,#3a6fd8);border-radius:2px;"></div>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;margin-top:4px;">飛行時間約 3hr</div>
+          <div style="background:#3a6fd8;color:#fff;border-radius:20px;padding:2px 12px;font-size:11px;font-family:'Helvetica Neue',sans-serif;display:inline-block;margin-top:6px;font-weight:700;">2026 / 5 / 9（六）</div>
+        </div>
+        <!-- 抵達 -->
+        <div style="flex:1;text-align:center;">
+          <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">抵達 Arrival</div>
+          <div style="font-size:46px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:var(--accent);line-height:1;letter-spacing:-2px;">12:55</div>
+          <div style="font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;color:#333;margin-top:6px;">新千歲機場</div>
+          <div style="font-size:13px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;">CTS · New Chitose</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 出發集合資訊 -->
+    <div style="background:#fff8e1;border:2px solid #f0c040;border-radius:10px;padding:14px 20px;margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#b8860b;margin-bottom:10px;">📢 出發集合資訊</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:#fff;border:1.5px solid #f0c040;border-radius:7px;padding:10px 14px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">🕐 集合時間</div>
+          <div style="font-size:22px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:var(--accent);letter-spacing:-0.5px;">＿＿：＿＿</div>
+          <div style="font-size:11px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;margin-top:2px;">請填寫集合時間</div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #f0c040;border-radius:7px;padding:10px 14px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">📍 集合地點</div>
+          <div style="font-size:14px;font-weight:700;font-family:'Helvetica Neue',sans-serif;color:var(--ink);border-bottom:1.5px solid #ddd;padding-bottom:6px;min-height:28px;">小港機場 &nbsp;＿＿＿＿ 櫃檯</div>
+          <div style="font-size:11px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;margin-top:4px;">請填寫具體集合地點</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 回程 ── -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:10px;">RETURN FLIGHT &nbsp;／&nbsp; 回程</div>
+      <div style="background:#fff5f5;border:2px solid var(--accent);border-radius:12px;padding:18px 24px;display:flex;align-items:center;gap:0;">
+        <div style="flex:1;text-align:center;">
+          <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">出發 Departure</div>
+          <div style="font-size:46px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:var(--accent);line-height:1;letter-spacing:-2px;">13:55</div>
+          <div style="font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;color:#333;margin-top:6px;">新千歲機場</div>
+          <div style="font-size:13px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;">CTS · New Chitose</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:0 12px;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:var(--accent);font-family:'Helvetica Neue',sans-serif;margin-bottom:4px;">IT 261</div>
+          <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+            <div style="height:2px;flex:1;background:linear-gradient(90deg,var(--accent),#3a6fd8);border-radius:2px;"></div>
+            <span style="font-size:20px;">✈</span>
+            <div style="height:2px;flex:1;background:linear-gradient(90deg,#3a6fd8,var(--accent));border-radius:2px;"></div>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;margin-top:4px;">飛行時間約 3hr</div>
+          <div style="background:var(--accent);color:#fff;border-radius:20px;padding:2px 12px;font-size:11px;font-family:'Helvetica Neue',sans-serif;display:inline-block;margin-top:6px;font-weight:700;">2026 / 5 / 19（二）</div>
+        </div>
+        <div style="flex:1;text-align:center;">
+          <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:4px;">抵達 Arrival</div>
+          <div style="font-size:46px;font-weight:800;font-family:'Helvetica Neue',sans-serif;color:#1a1a2e;line-height:1;letter-spacing:-2px;">18:05</div>
+          <div style="font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;color:#333;margin-top:6px;">高雄小港機場</div>
+          <div style="font-size:13px;color:var(--ink-soft);font-family:'Helvetica Neue',sans-serif;">KHH · Terminal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 行李與報到提醒 -->
+    <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:12px 18px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#3a6fd8;margin-bottom:8px;">⚠️ 行李與報到提醒</div>
+      <div style="font-size:13.5px;color:var(--ink-mid);font-family:'Helvetica Neue',sans-serif;line-height:2;">
+        📄 &nbsp;請準備好<strong style="color:var(--ink);">護照</strong>，隨時備查。<br>
+        💧 &nbsp;<strong style="color:var(--ink);">液體、凝膠、噴霧</strong>（超過 100ml）需放入<strong style="color:var(--accent);">托運行李</strong>。<br>
+        🔋 &nbsp;<strong style="color:var(--ink);">行動電源及鋰電池</strong>請務必<strong style="color:var(--accent);">隨身攜帶</strong>，<u>不可托運</u>。<br>
+        📏 &nbsp;可伸縮自拍棒（收合後 &gt;60cm）須<strong style="color:var(--accent);">托運</strong>，勿誤放隨身行李。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 頁尾 -->
+  <div class="page-footer" style="margin-top:auto;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div class="mile-chip">🛫 &nbsp;去程 IT260 &nbsp;|&nbsp; KHH → CTS</div>
+      <div class="mile-chip">🛬 &nbsp;回程 IT261 &nbsp;|&nbsp; CTS → KHH</div>
+      <div class="mile-chip">📅 &nbsp;旅遊日期 5/9–5/19 共 11 天</div>
+    </div>
+    <div class="notes-section" style="margin-top:12px;">
+      <div class="notes-title">Notes &nbsp;／&nbsp; 行前備忘</div>
+      <div class="notes-lines">
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flight-page -->
+
+
 <!-- ======================== DAY 1 ======================== -->
 <div class="page">
 
@@ -1881,7 +2008,7 @@
       <div>
         <div class="day-label">Hokkaido Road Trip &nbsp;·&nbsp; Day 10 of 11</div>
         <div class="day-title">札幌郊區（定山溪 · 三井 Outlet · 大通公園）</div>
-        <div class="day-date">2025年 5月 18日（一）</div>
+        <div class="day-date">2026年 5月 18日（一）</div>
       </div>
       <div class="mileage-box">
         <div class="mileage-label">今日里程</div>
@@ -1899,7 +2026,7 @@
       <div class="mile-chip">⛽ 加油提醒 <strong>453 km</strong></div>
     </div>
     <div class="timeline">
- 
+
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
@@ -1908,7 +2035,7 @@
           <div class="spot-desc">享用早餐後 08:30 出發，今日輕鬆悠閒，無需趕路。</div>
         </div>
       </div>
- 
+
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
@@ -1917,7 +2044,7 @@
           <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">札幌 → 定山溪</div></div>
         </div>
       </div>
- 
+
       <div class="tl-item">
         <div class="tl-time">09:10<br>↓<br>11:00</div>
         <div class="tl-dot"></div>
@@ -1926,7 +2053,7 @@
           <div class="spot-desc">悠閒的溫泉鄉，漫步過二見吊橋欣賞溪谷美景，並在公園泡免費足湯、煮溫泉蛋，體驗北海道溫泉鄉的愜意時光。</div>
         </div>
       </div>
- 
+
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
@@ -1935,7 +2062,7 @@
           <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">定山溪 → 三井 Outlet 北廣島</div></div>
         </div>
       </div>
- 
+
       <div class="tl-item">
         <div class="tl-time">12:00<br>↓<br>15:00</div>
         <div class="tl-dot"></div>
@@ -1944,7 +2071,7 @@
           <div class="spot-desc">北海道大型 Outlet 商場，適合長輩在此舒適地挑選伴手禮與服飾。午餐可於美食街自由選擇，整整三小時盡情採購！</div>
         </div>
       </div>
- 
+
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
@@ -1953,7 +2080,7 @@
           <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">三井 Outlet → 飯店</div></div>
         </div>
       </div>
- 
+
       <div class="tl-item">
         <div class="tl-time">15:40<br>↓<br>18:00</div>
         <div class="tl-dot"></div>
@@ -1962,7 +2089,7 @@
           <div class="spot-desc">稍作休息後，步行遊覽札幌最具代表性的城市地標，包括時計台、電視塔、紅磚舍廳與大通公園，感受美好的城市風情。</div>
         </div>
       </div>
- 
+
       <div class="tl-item">
         <div class="tl-time">18:30<br>↓</div>
         <div class="tl-dot"></div>
@@ -1971,7 +2098,7 @@
           <div class="spot-desc">享用豪華的百匯自助餐，用豐盛的美食大餐慰勞長途自駕的辛勞，為旅程最後一個夜晚留下美好回憶！</div>
         </div>
       </div>
- 
+
     </div>
   </div>
   <div class="page-footer">
@@ -2096,7 +2223,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🏠 啟程回家──IT261 新千歲 ✈ 高雄小港</div>
-          <div class="spot-desc" style="color:var(--accent);font-weight:600;">北海道 11 天、11 夜、1,539 公里的壯麗旅程，圓滿結束！帶著滿滿的回憶與伴手禮，平安回到台灣！</div>
+          <div class="spot-desc" style="color:var(--accent);font-weight:600;">北海道 11 天、11 夜、1,530 公里的壯麗旅程，圓滿結束！帶著滿滿的回憶與伴手禮，平安回到台灣！</div>
         </div>
       </div>
 
@@ -2119,6 +2246,143 @@
     </div>
   </div>
 </div><!-- /page day11 -->
+
+
+<!-- ======================== 行前準備頁 ======================== -->
+<div class="page" id="packing-page">
+  <div class="page-header" style="padding:22px 32px 18px;">
+    <div class="header-top">
+      <div>
+        <div class="day-label" style="letter-spacing:0.25em;">Pre-Trip Checklist &nbsp;·&nbsp; 行前準備物品清單</div>
+        <div class="day-title" style="font-size:23px;margin-top:4px;">🧳 出發前請逐一確認</div>
+        <div class="day-date" style="margin-top:4px;">北海道自駕旅行 &nbsp;·&nbsp; 2026年 5月 9日 – 5月 19日</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:10px 16px;text-align:center;flex-shrink:0;font-family:'Helvetica Neue',sans-serif;">
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);text-transform:uppercase;">出發日</div>
+        <div style="font-size:17px;font-weight:800;color:#fff;line-height:1.2;">5 / 9</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.75);">（六）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" style="padding:18px 28px 0;">
+
+    <!-- 表格容器 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+      <!-- ─── 出國相關文件 ─── -->
+      <div style="grid-column:1 / -1;">
+        <div style="background:var(--header-bg);color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">📋 &nbsp;出國相關文件</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="width:32px;padding:6px 10px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
+              <th style="padding:6px 12px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);letter-spacing:0.05em;">物品</th>
+              <th style="padding:6px 12px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">備註說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照影本</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">護照遺失時可派上用場，建議與正本分開放</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照包</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">重要證件、現金、駕照譯本隨身攜帶</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">信用卡</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">若住宿已刷卡預付，建議攜帶同一張以便核對</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">飯店住宿確認信</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">部分飯店需出示確認書才能辦理入住</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── 個人用品 ─── -->
+      <div>
+        <div style="background:#2c5f2e;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">🧴 &nbsp;個人用品</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">分類</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">清潔保養</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">護髮素、洗面粉、牙膏牙刷、壓縮毛巾、卸妝棉</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">隨身用品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">化妝包、衛生紙、濕紙巾、酒精擦</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">藥品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">蚊蟲藥、眼藥水、感冒藥、過敏藥、OK繃、護唇膏</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── 衣物配件 ─── -->
+      <div>
+        <div style="background:#5a3e8a;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">👗 &nbsp;衣物配件</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">分類</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">貼身衣物</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">內衣褲、睡衣褲、發熱衣、4套衣服、洗衣球、洗衣袋</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">外套配件</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">風衣、背心、帽子、墨鏡、圍巾、飾品</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">鞋襪 · 錢包</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">拖鞋、襪子、錢包、零錢包</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── 3C 用品 ─── -->
+      <div>
+        <div style="background:#b85c00;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">📱 &nbsp;3C 用品</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
+              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">備註說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">充電器</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">3-in-1（耳機、手錶、手機）</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:var(--accent);">行動電源 🔋</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;"><strong style="color:var(--accent);">隨身攜帶，不可托運</strong>。請先充飽電，每人限帶 2 個</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">eSIM 卡</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">出發前一天先行開通，確認可正常使用</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">自拍棒</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">依民航局規定攜帶，收合 &gt;60cm 者須托運</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── 只能托運的物品（跨欄） ─── -->
+      <div style="grid-column:1 / -1;">
+        <div style="background:var(--accent);color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">⚠️ &nbsp;只能托運的物品（請勿放入隨身行李）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+          <tbody>
+            <tr>
+              <td style="border:1px solid #ddd;padding:7px 14px;width:32px;text-align:center;font-size:16px;vertical-align:top;">1</td>
+              <td style="border:1px solid #ddd;padding:7px 14px;color:var(--ink-mid);">管徑一公分以上<strong style="color:var(--ink);">且</strong>可伸縮，且收合後高度超過 60 公分以上的自拍棒。</td>
+            </tr>
+            <tr style="background:#fafafa;">
+              <td style="border:1px solid #ddd;padding:7px 14px;text-align:center;font-size:16px;vertical-align:top;">2</td>
+              <td style="border:1px solid #ddd;padding:7px 14px;color:var(--ink-mid);">含有 <strong style="color:var(--ink);">24–70% 酒精飲料</strong>，必須以零售包裝托運，每人攜帶總量不得超過 <strong style="color:var(--ink);">5 公升</strong>。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- /grid -->
+  </div><!-- /page-body -->
+
+  <div class="page-footer" style="margin-top:12px;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <div class="mile-chip">✈ 出發日：2026 / 5 / 9</div>
+      <div class="mile-chip">🔋 行動電源隨身攜帶，不可托運</div>
+      <div class="mile-chip">💧 液體 &gt;100ml 托運</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-title">Notes &nbsp;／&nbsp; 行前備忘事項</div>
+      <div class="notes-lines">
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /packing-page -->
 
 </body>
 </html>
