@@ -156,6 +156,11 @@
     break-inside: avoid;
   }
 
+  /* 增加間距用的 class */
+  .tl-item.spread-more {
+      margin-bottom: 24px !important;
+  }
+
   /* ── 時間欄 ── */
   .tl-time {
     width: 84px;
@@ -264,6 +269,10 @@
     padding: 10px 16px;
     margin: 0 0 18px 84px;
     position: relative;
+  }
+  
+  .drive-card.spread-more {
+      margin-bottom: 24px !important;
   }
 
   .drive-icon {
@@ -410,30 +419,44 @@
     font-weight: 700;
   }
 
+  /* 手動換頁標籤 */
+  .force-page-break {
+      display: none; /* 螢幕上不顯示 */
+  }
+
   /* ==============================================================
-     極限瘦身版：完美列印設定（解決 32 頁溢出問題）
+     列印排版優化版
      ============================================================== */
   @media print {
     *, *::before, *::after {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
-      box-shadow: none !important; /* 拔除所有陰影以保證列印乾淨 */
+      box-shadow: none !important;
     }
 
     html, body {
       background: #ffffff !important;
-      font-size: 13.5px !important; /* 稍微縮小基礎字體 */
-      line-height: 1.45 !important; /* 收緊行距 */
+      font-size: 14px !important;
+      line-height: 1.5 !important;
       margin: 0 !important;
       padding: 0 !important;
     }
 
     @page {
       size: A4 portrait;
-      margin: 10mm 12mm; /* 極限縮小紙張邊界，爭取更多列印面積 */
+      margin: 10mm 15mm; /* 稍微放大左右邊界，讓整體看起來不擁擠 */
     }
 
-    /* ─ 解除高度限制並強制分頁 ─ */
+    /* 手動換頁標籤啟動 */
+    .force-page-break {
+        display: block !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        height: 0;
+        border: none;
+    }
+
+    /* ─ 移除強制分頁，改為自然流動，但第一頁開始前強迫分頁 ─ */
     .page {
       width: 100% !important;
       min-height: unset !important;
@@ -441,58 +464,103 @@
       height: auto !important;
       margin: 0 !important;
       padding: 0 !important;
-      page-break-after: always !important;
-      break-after: page !important;
+      page-break-after: unset !important;
+      break-after: unset !important;
+    }
+    
+    /* 每一天的開頭（.page-header）強制在列印時不被切斷，但如果空間夠就跟在上一天後面（或是你想要每天都新的一頁？） 
+       按照你的需求，每天都應該從新的一頁開始比較乾淨，所以我保留每天開頭強制換頁 */
+    .page {
+        page-break-before: always !important;
+        break-before: page !important;
+    }
+    .page:first-child {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
     }
 
-    /* ─ 大幅壓縮天地留白 ─ */
-    .page-header { padding: 12px 18px 10px !important; }
-    .page-body { padding: 10px 18px 0 !important; }
-    .page-footer { padding: 8px 18px 0 !important; margin-top: 8px !important; }
-    
-    .day-title { font-size: 22px !important; margin-top: 2px !important; }
-    .route-bar { margin-top: 8px !important; padding-top: 8px !important; font-size: 13px !important; }
-    .mileage-summary { margin-bottom: 8px !important; }
+    /* ─ 區塊不被切斷 ─ */
+    .page-header { padding: 18px 20px 14px !important; page-break-inside: avoid !important; }
+    .page-body { padding: 14px 20px 0 !important; }
+    /* 為了讓住宿三餐可以在畫面最下方，給 body 一個 min-height (只有在沒有跨頁時生效) */
+    .page-body.short-day { min-height: 180mm !important; }
 
-    /* ─ 壓縮時間軸與卡片間距 ─ */
-    .tl-item { margin-bottom: 8px !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+    .page-footer { 
+        padding: 10px 20px 0 !important; 
+        margin-top: 14px !important; 
+        page-break-inside: avoid !important; 
+    }
+    
+    /* 當天行程較多，第二頁的頁尾要維持在中下方 */
+    .page-footer.push-down {
+        margin-top: 40mm !important;
+    }
+    
+    /* 第一天的特殊下推 */
+    #day1-footer { margin-top: 40mm !important; }
+
+    .day-title { font-size: 24px !important; margin-top: 4px !important; }
+    .route-bar { margin-top: 10px !important; padding-top: 10px !important; font-size: 14px !important; }
+    .mileage-summary { margin-bottom: 12px !important; }
+
+    /* ─ 時間軸與卡片間距 ─ */
+    .tl-item { 
+        margin-bottom: 12px !important; 
+        page-break-inside: avoid !important; 
+        break-inside: avoid !important; 
+    }
+    .tl-item.spread-more { margin-bottom: 24px !important; } /* 行程少的日子拉開間距 */
+    
     .tl-content { padding-bottom: 0 !important; }
-    .spot-name { font-size: 15.5px !important; margin-bottom: 2px !important; }
-    .spot-desc { font-size: 12.5px !important; margin-bottom: 2px !important; line-height: 1.4 !important; }
+    .spot-name { font-size: 16px !important; margin-bottom: 4px !important; }
+    .spot-desc { font-size: 13.5px !important; margin-bottom: 4px !important; line-height: 1.5 !important; }
 
     .drive-card { 
-      padding: 6px 12px !important; 
-      margin: 0 0 8px 84px !important; 
-      gap: 10px !important; 
+      padding: 8px 14px !important; 
+      margin: 0 0 12px 84px !important; 
+      gap: 12px !important; 
       page-break-inside: avoid !important; 
       break-inside: avoid !important; 
     }
-    .drive-icon { font-size: 18px !important; }
-    .drive-stat-value { font-size: 14px !important; }
-
-    /* ─ 壓縮頁尾高度 ─ */
-    .hotel-summary { padding: 6px 12px !important; margin-bottom: 8px !important; font-size: 13px !important; }
-    .footer-summary { gap: 6px !important; margin-bottom: 6px !important; }
-    .meal-item { padding: 6px 10px !important; }
-    .meal-value { font-size: 12px !important; margin-top: 1px !important; }
+    .drive-card.spread-more { margin-bottom: 24px !important; } /* 行程少的日子拉開間距 */
     
-    .notes-section { padding: 4px 0 6px !important; }
-    .notes-title { margin-bottom: 2px !important; }
-    .notes-line { height: 18px !important; } /* 筆記線距縮小 */
+    .drive-icon { font-size: 20px !important; }
+    .drive-stat-value { font-size: 15px !important; }
 
-    /* ─ 圖片高度封印：避免單張圖過長迫使版面腰斬 ─ */
+    /* ─ 頁尾細節 ─ */
+    .hotel-summary { padding: 8px 14px !important; margin-bottom: 10px !important; font-size: 14px !important; }
+    .footer-summary { gap: 8px !important; margin-bottom: 8px !important; }
+    .meal-item { padding: 8px 12px !important; }
+    .meal-value { font-size: 13px !important; margin-top: 2px !important; }
+    
+    .notes-section { padding: 6px 0 8px !important; }
+    .notes-title { margin-bottom: 4px !important; }
+    .notes-line { height: 22px !important; } 
+
+    /* ─ 圖片處理 ─ */
     img {
-      max-height: 250px !important;
+      max-height: 300px !important;
       width: auto !important;
       max-width: 100% !important;
     }
 
-    /* 確保表格等區塊不被切斷 */
     table, tr, .checklist-warning {
       page-break-inside: avoid !important;
       break-inside: avoid !important;
     }
     table { border-collapse: collapse; }
+    
+    /* 針對停車場，一頁兩家 */
+    #parking-page .hotel-parking-card {
+        page-break-inside: avoid !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* 預約確認單 */
+    #reservation-page .reservation-card {
+        page-break-inside: avoid !important;
+        margin-bottom: 20px !important;
+    }
   }
 
   /* ===== 響應式螢幕預覽 ===== */
@@ -521,10 +589,11 @@
     </div>
   </div>
 
-  <div class="page-body" style="padding:24px 32px 0;">
+  <div class="page-body short-day" style="padding:24px 32px 0;">
 
     <!-- ── 去程 ── -->
-    <div style="margin-bottom:20px;">
+    <!-- 需求1: 稍微分開一點 -->
+    <div style="margin-bottom:30px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:10px;">OUTBOUND FLIGHT &nbsp;／&nbsp; 去程</div>
       <div style="background:#f5f9ff;border:2px solid #3a6fd8;border-radius:12px;padding:18px 24px;display:flex;align-items:center;gap:0;">
         <!-- 出發 -->
@@ -556,7 +625,7 @@
     </div>
 
     <!-- 出發集合資訊 -->
-    <div style="background:#fff8e1;border:2px solid #f0c040;border-radius:10px;padding:14px 20px;margin-bottom:20px;">
+    <div style="background:#fff8e1;border:2px solid #f0c040;border-radius:10px;padding:14px 20px;margin-bottom:30px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#b8860b;margin-bottom:10px;">📢 出發集合資訊</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div style="background:#fff;border:1.5px solid #f0c040;border-radius:7px;padding:10px 14px;">
@@ -573,7 +642,7 @@
     </div>
 
     <!-- ── 回程 ── -->
-    <div style="margin-bottom:20px;">
+    <div style="margin-bottom:40px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:10px;">RETURN FLIGHT &nbsp;／&nbsp; 回程</div>
       <div style="background:#fff5f5;border:2px solid var(--accent);border-radius:12px;padding:18px 24px;display:flex;align-items:center;gap:0;">
         <div style="flex:1;text-align:center;">
@@ -601,7 +670,7 @@
       </div>
     </div>
 
-    <!-- 行李與報到提醒 -->
+    <!-- 行李與報到提醒 (往下移) -->
     <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:12px 18px;" class="checklist-warning">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#3a6fd8;margin-bottom:8px;">⚠️ 行李與報到提醒</div>
       <div style="font-size:13.5px;color:var(--ink-mid);font-family:'Helvetica Neue',sans-serif;line-height:2;">
@@ -613,11 +682,6 @@
     </div>
 
   </div>
-
-  <!-- 頁尾 -->
-  <div class="page-footer" style="margin-top:auto;">
-  </div>
-
 </div><!-- /flight-page -->
 
 
@@ -640,15 +704,16 @@
     </div>
   </div>
 
-  <div class="page-body">
-    <div class="mileage-summary">
+  <!-- 需求2: 第一天行程欄位分開一點 -->
+  <div class="page-body short-day">
+    <div class="mileage-summary" style="margin-bottom: 24px;">
       <div class="mile-chip">今日行駛 <strong>80 km</strong></div>
       <div class="mile-chip">累計里程 <strong>80 km</strong></div>
       <div class="mile-chip">加油提醒 <strong>80 km</strong></div>
     </div>
 
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">08:00<br>↓<br>12:55</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -657,7 +722,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">12:55<br>↓<br>15:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -666,7 +731,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">35 分鐘</div></div>
@@ -675,7 +740,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">16:05<br>↓<br>16:50</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -684,7 +749,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">55 分鐘</div></div>
@@ -707,7 +772,7 @@
     </div>
   </div>
 
-  <div class="page-footer">
+  <div class="page-footer" id="day1-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>登別 石水亭</strong></span>
@@ -754,8 +819,9 @@
       <div class="mile-chip">加油提醒 <strong>170 km</strong></div>
     </div>
 
+    <!-- 需求3: 讓第一頁行程分散一點 -->
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -764,7 +830,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">08:00<br>↓<br>09:45</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -773,7 +839,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">70 分鐘</div></div>
@@ -782,7 +848,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">11:00<br>↓<br>11:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -791,7 +857,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
@@ -799,8 +865,11 @@
           <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">浮見堂 → 水之驛</div></div>
         </div>
       </div>
+      
+      <!-- Day 2 強制換頁點 -->
+      <div class="force-page-break"></div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">11:35<br>↓<br>12:35</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -889,7 +958,8 @@
     </div>
   </div>
 
-  <div class="page-footer">
+  <!-- 第二頁中下方：推下頁尾 -->
+  <div class="page-footer push-down">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>洞爺觀光酒店</strong></span>
@@ -928,14 +998,16 @@
       <strong>今日路線：</strong>洞爺觀光酒店 &nbsp;→&nbsp; 八雲 PA 休息 &nbsp;→&nbsp; 函館朝市（午餐） &nbsp;→&nbsp; 金森紅磚倉庫群 &nbsp;→&nbsp; 八幡坂 &nbsp;→&nbsp; MYSTAYS 函館站前
     </div>
   </div>
-  <div class="page-body">
-    <div class="mileage-summary">
+  
+  <!-- 需求4: 稍微分開一點點，頁尾往下移 -->
+  <div class="page-body short-day">
+    <div class="mileage-summary" style="margin-bottom: 20px;">
       <div class="mile-chip">今日行駛 <strong>165 km</strong></div>
       <div class="mile-chip">累計里程 <strong>335 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>335 km</strong></div>
     </div>
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -944,7 +1016,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">81 分鐘</div></div>
@@ -953,7 +1025,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">10:25<br>↓<br>10:50</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -962,7 +1034,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">82 分鐘</div></div>
@@ -1021,7 +1093,7 @@
 
     </div>
   </div>
-  <div class="page-footer">
+  <div class="page-footer" style="margin-top: 30mm !important;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1066,8 +1138,10 @@
       <div class="mile-chip">累計里程 <strong>535 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>535 km</strong></div>
     </div>
+    
+    <!-- 需求5: 讓第一頁行程分散一點 -->
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1076,7 +1150,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">100 分鐘</div></div>
@@ -1085,7 +1159,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">10:40<br>↓<br>10:50</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1094,7 +1168,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">12 分鐘</div></div>
@@ -1103,7 +1177,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">11:05<br>↓<br>11:20</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1112,7 +1186,10 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <!-- Day 4 強制換頁點 -->
+      <div class="force-page-break"></div>
+
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
@@ -1121,7 +1198,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">11:25<br>↓<br>12:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1133,7 +1210,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">午餐</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1182,7 +1259,8 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
+  
+  <div class="page-footer push-down">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1227,8 +1305,10 @@
       <div class="mile-chip">累計里程 <strong>705 km</strong></div>
       <div class="mile-chip">⛽ 今日加油 <strong>160 km</strong></div>
     </div>
+    
+    <!-- 需求6: 讓第一頁行程分散一點 -->
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1237,7 +1317,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">15 分鐘</div></div>
@@ -1246,7 +1326,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">08:45<br>↓<br>08:55</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1255,7 +1335,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">4 分鐘</div></div>
@@ -1264,7 +1344,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">09:00<br>↓<br>09:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1273,7 +1353,10 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <!-- Day 5 強制換頁點 -->
+      <div class="force-page-break"></div>
+
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">55 分鐘</div></div>
@@ -1282,7 +1365,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">10:35<br>↓<br>11:20</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1356,7 +1439,8 @@
 
     </div>
   </div>
-  <div class="page-footer">
+  
+  <div class="page-footer push-down">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1395,14 +1479,16 @@
       <strong>今日路線：</strong>函館退房 &nbsp;→&nbsp; 八雲 PA 休息 &nbsp;→&nbsp; 岩內町 北緯43度海鮮（午餐） &nbsp;→&nbsp; Nord 小樽飯店 &nbsp;→&nbsp; 小樽運河散步 &amp; 晚餐
     </div>
   </div>
-  <div class="page-body">
-    <div class="mileage-summary">
+  
+  <!-- 需求7: 稍微分開一點點，頁尾往下移 -->
+  <div class="page-body short-day">
+    <div class="mileage-summary" style="margin-bottom: 20px;">
       <div class="mile-chip">今日行駛 <strong>235 km</strong></div>
       <div class="mile-chip">累計里程 <strong>940 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>395 km</strong></div>
     </div>
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1411,7 +1497,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">81 分鐘</div></div>
@@ -1420,7 +1506,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">10:05<br>↓<br>10:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1429,7 +1515,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">105 分鐘</div></div>
@@ -1478,7 +1564,8 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
+  
+  <div class="page-footer" style="margin-top: 30mm !important;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Nord 小樽飯店</strong></span>
@@ -1781,8 +1868,10 @@
       <div class="mile-chip">累計里程 <strong>1,422 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>376 km</strong></div>
     </div>
+
+    <!-- 需求10: 讓第一頁行程分散一點 -->
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>09:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1791,7 +1880,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">40 分鐘</div></div>
@@ -1800,7 +1889,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">09:40<br>↓<br>10:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1812,7 +1901,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">19 分鐘</div></div>
@@ -1821,7 +1910,10 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <!-- Day 9 強制換頁點 -->
+      <div class="force-page-break"></div>
+
+      <div class="tl-item spread-more">
         <div class="tl-time">10:50<br>↓<br>12:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1906,7 +1998,8 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
+  
+  <div class="page-footer push-down">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -1945,14 +2038,16 @@
       <strong>今日路線：</strong>定山溪（足湯 &amp; 二見吊橋） &nbsp;→&nbsp; 三井 Outlet 北廣島（午餐 &amp; 購物） &nbsp;→&nbsp; 飯店 &nbsp;→&nbsp; 時計台 · 電視塔 · 大通公園 &nbsp;→&nbsp; The Sakura Buffet（晚餐）
     </div>
   </div>
-  <div class="page-body">
-    <div class="mileage-summary">
+  
+  <!-- 需求11: 稍微分開一點點，頁尾往下移 -->
+  <div class="page-body short-day">
+    <div class="mileage-summary" style="margin-bottom: 20px;">
       <div class="mile-chip">今日行駛 <strong>77 km</strong></div>
       <div class="mile-chip">累計里程 <strong>1,499 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>453 km</strong></div>
     </div>
     <div class="timeline">
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1961,7 +2056,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">39 分鐘</div></div>
@@ -1970,7 +2065,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item spread-more">
         <div class="tl-time">09:10<br>↓<br>11:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1979,7 +2074,7 @@
         </div>
       </div>
 
-      <div class="drive-card">
+      <div class="drive-card spread-more">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">48 分鐘</div></div>
@@ -2025,7 +2120,8 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
+  
+  <div class="page-footer" style="margin-top: 30mm !important;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -2171,93 +2267,94 @@
     <div class="header-top">
       <div>
         <div class="day-label" style="letter-spacing:0.25em;">Pre-Trip Checklist &nbsp;·&nbsp; 行前準備物品清單</div>
-        <div class="day-title" style="font-size:23px;margin-top:4px;">🧳 出發前請逐一確認</div>
-        <div class="day-date" style="margin-top:4px;">北海道自駕旅行 &nbsp;·&nbsp; 2026年 5月 9日 – 5月 19日</div>
+        <div class="day-title" style="font-size:26px;margin-top:4px;">🧳 出發前請逐一確認</div>
+        <div class="day-date" style="margin-top:4px;font-size:16px;">北海道自駕旅行 &nbsp;·&nbsp; 2026年 5月 9日 – 5月 19日</div>
       </div>
-      <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:10px 16px;text-align:center;flex-shrink:0;font-family:'Helvetica Neue',sans-serif;">
-        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);text-transform:uppercase;">出發日</div>
-        <div style="font-size:17px;font-weight:800;color:#fff;line-height:1.2;">5 / 9</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.75);">（六）</div>
+      <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:12px 18px;text-align:center;flex-shrink:0;font-family:'Helvetica Neue',sans-serif;">
+        <div style="font-size:12px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);text-transform:uppercase;">出發日</div>
+        <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.2;">5 / 9</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.75);">（六）</div>
       </div>
     </div>
   </div>
 
-  <div class="page-body" style="padding:18px 28px 0;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+  <!-- 需求13: 行前準備物品清單字體加大，排版平均 -->
+  <div class="page-body short-day" style="padding:24px 32px 0;">
+    <div style="display:flex;flex-direction:column;gap:30px;height:100%;">
 
       <!-- ─── 出國相關文件 ─── -->
-      <div style="grid-column:1 / -1;">
-        <div style="background:var(--header-bg);color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">📋 &nbsp;出國相關文件</div>
-        <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+      <div>
+        <div style="background:var(--header-bg);color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.15em;padding:10px 18px;border-radius:8px 8px 0 0;">📋 &nbsp;出國相關文件</div>
+        <table style="width:100%;border-collapse:collapse;font-size:16px;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="width:32px;padding:6px 10px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
-              <th style="padding:6px 12px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);letter-spacing:0.05em;">物品</th>
-              <th style="padding:6px 12px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">備註說明</th>
+              <th style="width:40px;padding:8px 12px;border:1px solid #ddd;text-align:center;font-size:14px;color:var(--ink-soft);">✓</th>
+              <th style="width:30%;padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">物品</th>
+              <th style="padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">備註說明</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照影本</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">護照遺失時可派上用場，建議與正本分開放</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照包</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">重要證件、現金、駕照譯本隨身攜帶</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">信用卡</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">若住宿已刷卡預付，建議攜帶同一張以便核對</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">飯店確認信</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">部分飯店需出示確認書才能辦理入住</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:var(--ink);">護照影本</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">護照遺失時可派上用場，建議與正本分開放</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:var(--ink);">護照包</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">重要證件、現金、駕照譯本隨身攜帶</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:var(--ink);">信用卡</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">若住宿已刷卡預付，建議攜帶同一張以便核對</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:var(--ink);">飯店確認信</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">部分飯店需出示確認書才能辦理入住</td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- ─── 個人用品 ─── -->
       <div>
-        <div style="background:#2c5f2e;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">🧴 &nbsp;個人用品</div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <div style="background:#2c5f2e;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.15em;padding:10px 18px;border-radius:8px 8px 0 0;">🧴 &nbsp;個人用品</div>
+        <table style="width:100%;border-collapse:collapse;font-size:16px;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">分類</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
+              <th style="width:40px;padding:8px 12px;border:1px solid #ddd;text-align:center;font-size:14px;color:var(--ink-soft);">✓</th>
+              <th style="width:20%;padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">分類</th>
+              <th style="padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">物品</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">清潔保養</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">洗臉、牙刷、壓縮毛巾、卸妝</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">隨身用品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">衛生紙、濕紙巾、酒精擦</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">藥品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">蚊蟲藥、感冒藥、過敏藥、OK繃</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#2c5f2e;">清潔保養</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">洗臉、牙刷、壓縮毛巾、卸妝</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#2c5f2e;">隨身用品</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">衛生紙、濕紙巾、酒精擦</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#2c5f2e;">藥品</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">蚊蟲藥、感冒藥、過敏藥、OK繃</td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- ─── 衣物配件 ─── -->
       <div>
-        <div style="background:#5a3e8a;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">👗 &nbsp;衣物配件</div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <div style="background:#5a3e8a;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.15em;padding:10px 18px;border-radius:8px 8px 0 0;">👗 &nbsp;衣物配件</div>
+        <table style="width:100%;border-collapse:collapse;font-size:16px;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">分類</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
+              <th style="width:40px;padding:8px 12px;border:1px solid #ddd;text-align:center;font-size:14px;color:var(--ink-soft);">✓</th>
+              <th style="width:20%;padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">分類</th>
+              <th style="padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">物品</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">貼身衣物</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">內衣褲、睡衣、4套衣服、洗衣袋</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">外套配件</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">風衣、背心、帽子、墨鏡</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">鞋襪錢包</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">拖鞋、襪子、錢包、零錢包</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#5a3e8a;">貼身衣物</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">內衣褲、睡衣、4套衣服、洗衣袋</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#5a3e8a;">外套配件</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">風衣、背心、帽子、墨鏡</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#5a3e8a;">鞋襪錢包</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">拖鞋、襪子、錢包、零錢包</td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- ─── 3C 用品 ─── -->
-      <div style="grid-column:1 / -1;">
-        <div style="background:#b85c00;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">📱 &nbsp;3C 用品</div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <div>
+        <div style="background:#b85c00;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.15em;padding:10px 18px;border-radius:8px 8px 0 0;">📱 &nbsp;3C 用品</div>
+        <table style="width:100%;border-collapse:collapse;font-size:16px;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="width:32px;padding:5px 8px;border:1px solid #ddd;text-align:center;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">✓</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">物品</th>
-              <th style="padding:5px 10px;border:1px solid #ddd;text-align:left;font-family:'Helvetica Neue',sans-serif;font-size:11px;color:var(--ink-soft);">備註說明</th>
+              <th style="width:40px;padding:8px 12px;border:1px solid #ddd;text-align:center;font-size:14px;color:var(--ink-soft);">✓</th>
+              <th style="width:30%;padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">物品</th>
+              <th style="padding:8px 14px;border:1px solid #ddd;text-align:left;font-size:14px;color:var(--ink-soft);">備註說明</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">充電器</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">3-in-1（耳機、手錶、手機）</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:var(--accent);">行動電源 🔋</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;"><strong style="color:var(--accent);">隨身攜帶，不可托運</strong>。每人限帶 2 個</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">eSIM 卡</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">出發前一天先行開通，確認可正常使用</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#b85c00;">充電器</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">3-in-1（耳機、手錶、手機）</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:var(--accent);">行動電源 🔋</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);"><strong style="color:var(--accent);">隨身攜帶，不可托運</strong>。每人限帶 2 個</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:10px;text-align:center;font-size:20px;">□</td><td style="border:1px solid #ddd;padding:10px 14px;font-weight:700;color:#b85c00;">eSIM 卡</td><td style="border:1px solid #ddd;padding:10px 14px;color:var(--ink-mid);">出發前一天先行開通，確認可正常使用</td></tr>
           </tbody>
         </table>
       </div>
@@ -2265,81 +2362,98 @@
     </div>
   </div>
 
-  <div class="page-footer" style="margin-top:12px;"></div>
+  <div class="page-footer" style="margin-top:auto;"></div>
 </div><!-- /packing-page -->
 
 
-<!-- ======================== 附錄：停車場指南 ======================== -->
-<div class="page" id="parking-page">
+<!-- ======================== 附錄：停車場指南 (1) 函館與小樽 ======================== -->
+<!-- 需求14: 一頁兩家飯店 -->
+<div class="page" id="parking-page-1">
   <div class="page-header" style="padding:22px 32px 18px;">
     <div class="header-top">
       <div>
         <div class="day-label" style="letter-spacing:0.25em;">Appendix &nbsp;·&nbsp; 附錄</div>
-        <div class="day-title" style="font-size:22px;margin-top:4px;">🅿️ 四大市區飯店停車指南</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:10px 16px;text-align:center;flex-shrink:0;font-family:'Helvetica Neue',sans-serif;">
-        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);text-transform:uppercase;">飯店數</div>
-        <div style="font-size:28px;font-weight:800;color:#fff;line-height:1.1;">4<span style="font-size:14px;font-weight:400;">間</span></div>
+        <div class="day-title" style="font-size:22px;margin-top:4px;">🅿️ 市區飯店停車指南 (1)</div>
       </div>
     </div>
   </div>
 
-  <div class="page-body" style="padding:20px 28px 0; display:flex; flex-direction:column; gap:12px;">
+  <div class="page-body" style="padding:16px 28px 0; display:flex; flex-direction:column; gap:20px;">
 
     <!-- ══════ 1. 函館 ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
-      <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:10px;">
-        <span style="font-size:18px;">🏨</span>
+    <div class="hotel-parking-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;">
+      <div style="background:#1a1a2e;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px;">🏨</span>
         <div>
-          <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">函館 Hakodate</div>
-          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">MYSTAYS 函館站前旅館</div>
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">函館 Hakodate</div>
+          <div style="font-size:18px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">MYSTAYS 函館站前旅館</div>
         </div>
-        <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">700円／天</div>
+        <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:4px 14px;font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">700円／天</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:14px 18px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
-            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>平面 43 格</li>
-            <li style="margin-bottom:6px;">📐 &nbsp;<strong>車輛限制：</strong>長 5.0m／寬 1.83m</li>
-            <li style="margin-bottom:6px;">🕐 &nbsp;<strong>開放時間：</strong>24 小時</li>
-            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 先到先停，外出恕不保留。滿位需自行尋找附近車位。</li>
+        <div style="padding:16px 20px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:16px;line-height:1.8;">
+            <li style="margin-bottom:8px;">🅿️ &nbsp;<strong>車位數：</strong>平面 43 格</li>
+            <li style="margin-bottom:8px;">📐 &nbsp;<strong>車輛限制：</strong>長 5.0m／寬 1.83m</li>
+            <li style="margin-bottom:8px;">🕐 &nbsp;<strong>開放時間：</strong>24 小時</li>
+            <li style="color:var(--accent);font-weight:700;">⚠️ 先到先停，外出恕不保留。滿位需自行尋找附近車位。</li>
           </ul>
         </div>
-        <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
-          <img src="images/hakodate_maps.jpg" alt="函館停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
-          <img src="images/hakodate_view.jpg" alt="函館停車場實景" style="width:100%;height:auto;object-fit:contain;display:block;">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:10px;background:#f5f5f5;">
+          <!-- 圖片大小調整 -->
+          <img src="images/hakodate_maps.jpg" alt="函館停車場地圖" style="width:100%;height:180px;object-fit:cover;border-radius:4px;display:block;">
+          <img src="images/hakodate_view.jpg" alt="函館停車場實景" style="width:100%;height:180px;object-fit:cover;border-radius:4px;display:block;">
         </div>
       </div>
     </div>
 
     <!-- ══════ 2. 小樽 ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
-      <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:10px;">
-        <span style="font-size:18px;">🏨</span>
+    <div class="hotel-parking-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;">
+      <div style="background:#1a1a2e;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px;">🏨</span>
         <div>
-          <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">小樽 Otaru</div>
-          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">Nord 小樽飯店</div>
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">小樽 Otaru</div>
+          <div style="font-size:18px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">Nord 小樽飯店</div>
         </div>
-        <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">1,200円／天</div>
+        <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:4px 14px;font-size:15px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">1,200円／天</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:14px 18px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
-            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>立體平面 46 格</li>
-            <li style="margin-bottom:6px;">📐 &nbsp;<strong>車輛限制：</strong>寬 1.9m／<strong style="color:var(--accent);">高 2.05m</strong></li>
-            <li style="margin-bottom:6px;">🕐 &nbsp;<strong>開放時間：</strong>15:00 ～ 隔日 11:00</li>
-            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 抵達時請由櫃檯人員引導入場。先到先停，無合作停車場。</li>
+        <div style="padding:16px 20px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:16px;line-height:1.8;">
+            <li style="margin-bottom:8px;">🅿️ &nbsp;<strong>車位數：</strong>立體平面 46 格</li>
+            <li style="margin-bottom:8px;">📐 &nbsp;<strong>車輛限制：</strong>寬 1.9m／<strong style="color:var(--accent);">高 2.05m</strong></li>
+            <li style="margin-bottom:8px;">🕐 &nbsp;<strong>開放時間：</strong>15:00 ～ 隔日 11:00</li>
+            <li style="color:var(--accent);font-weight:700;">⚠️ 抵達時由櫃檯引導入場。無合作停車場。</li>
           </ul>
         </div>
-        <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
-          <img src="images/otaru_maps.jpg" alt="小樽停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
-          <img src="images/otaru_view.jpg" alt="小樽停車場實景" style="width:100%;height:auto;object-fit:contain;display:block;">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:10px;background:#f5f5f5;">
+          <img src="images/otaru_maps.jpg" alt="小樽停車場地圖" style="width:100%;height:180px;object-fit:cover;border-radius:4px;display:block;">
+          <img src="images/otaru_view.jpg" alt="小樽停車場實景" style="width:100%;height:180px;object-fit:cover;border-radius:4px;display:block;">
         </div>
       </div>
     </div>
 
+  </div>
+
+  <div class="page-footer" style="margin-top:auto;"></div>
+</div><!-- /parking-page-1 -->
+
+
+<!-- ======================== 附錄：停車場指南 (2) 旭川與札幌 ======================== -->
+<div class="page" id="parking-page-2">
+  <div class="page-header" style="padding:22px 32px 18px;">
+    <div class="header-top">
+      <div>
+        <div class="day-label" style="letter-spacing:0.25em;">Appendix &nbsp;·&nbsp; 附錄</div>
+        <div class="day-title" style="font-size:22px;margin-top:4px;">🅿️ 市區飯店停車指南 (2)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" style="padding:16px 28px 0; display:flex; flex-direction:column; gap:20px;">
+
     <!-- ══════ 3. 旭川 ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
+    <div class="hotel-parking-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;">
       <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:10px;">
         <span style="font-size:18px;">🏨</span>
         <div>
@@ -2347,51 +2461,51 @@
           <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">旭川 Court Hotel</div>
         </div>
       </div>
-      <div style="background:#fff0f0;border-bottom:2px solid var(--accent);padding:6px 14px;display:flex;align-items:center;gap:10px;">
+      <div style="background:#fff0f0;border-bottom:2px solid var(--accent);padding:8px 14px;display:flex;align-items:center;gap:10px;">
         <span style="font-size:16px;">⚠️</span>
         <div style="font-size:15px;font-weight:700;color:var(--accent);font-family:'Helvetica Neue',sans-serif;">
           飯店本館為<strong>機械式停車場，嚴格限高 1.55m！</strong>超高車輛請停放周邊。
         </div>
       </div>
       <div style="padding:6px;background:#f5f5f5;border-bottom:1px solid #eee;">
-        <img src="images/asahikawa_maps.jpg" alt="旭川停車場俯視圖" style="width:100%;height:auto;object-fit:contain;display:block;">
+        <img src="images/asahikawa_maps.jpg" alt="旭川停車場俯視圖" style="width:100%;height:140px;object-fit:cover;border-radius:4px;display:block;">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
         <div style="border-right:1px solid #eee;">
           <div style="padding:6px;background:#f5f5f5;">
-            <img src="images/asahikawa_view1.jpg" alt="停車場A" style="width:100%;height:auto;object-fit:contain;display:block;">
+            <img src="images/asahikawa_view1.jpg" alt="停車場A" style="width:100%;height:100px;object-fit:cover;border-radius:4px;display:block;">
           </div>
-          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+          <div style="padding:6px 10px;font-size:13px;line-height:1.5;">
             <div style="font-weight:700;color:#1a1a2e;">付費停車場 A</div>
             <div>24h 上限 <strong>1,100円</strong></div>
-            <div style="color:var(--accent);font-weight:600;font-size:12px;">⚠️ 有車底擋板！離開先繳費</div>
+            <div style="color:var(--accent);font-weight:700;">⚠️ 有擋板！離開先繳費</div>
           </div>
         </div>
         <div style="border-right:1px solid #eee;">
           <div style="padding:6px;background:#f5f5f5;">
-            <img src="images/asahikawa_view2.jpg" alt="停車場B" style="width:100%;height:auto;object-fit:contain;display:block;">
+            <img src="images/asahikawa_view2.jpg" alt="停車場B" style="width:100%;height:100px;object-fit:cover;border-radius:4px;display:block;">
           </div>
-          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+          <div style="padding:6px 10px;font-size:13px;line-height:1.5;">
             <div style="font-weight:700;color:#1a1a2e;">付費停車場 B</div>
             <div>12h 上限 <strong>500円</strong></div>
-            <div style="color:var(--ink-mid);font-size:12px;">無擋板，至機器按號碼繳費</div>
+            <div style="color:var(--ink-mid);">無擋板，機器按號碼繳費</div>
           </div>
         </div>
         <div>
           <div style="padding:6px;background:#f5f5f5;">
-            <img src="images/asahikawa_view3.jpg" alt="停車場C" style="width:100%;height:auto;object-fit:contain;display:block;">
+            <img src="images/asahikawa_view3.jpg" alt="停車場C" style="width:100%;height:100px;object-fit:cover;border-radius:4px;display:block;">
           </div>
-          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+          <div style="padding:6px 10px;font-size:13px;line-height:1.5;">
             <div style="font-weight:700;color:#1a1a2e;">付費停車場 C</div>
             <div>24h 上限 <strong>1,100円</strong></div>
-            <div style="color:var(--accent);font-weight:600;font-size:12px;">⚠️ 有車底擋板！離開先繳費</div>
+            <div style="color:var(--accent);font-weight:700;">⚠️ 有擋板！離開先繳費</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ══════ 4. 札幌 ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
+    <div class="hotel-parking-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;">
       <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:10px;">
         <span style="font-size:18px;">🏨</span>
         <div>
@@ -2401,31 +2515,31 @@
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">2,000円／天</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:14px 18px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
-            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>機械 14格；平面 7格</li>
+        <div style="padding:12px 16px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:15px;line-height:1.6;">
+            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位：</strong>機械 14格；平面 7格</li>
             <li style="margin-bottom:6px;"><strong style="color:var(--accent);">⚠️ 限高 1.55m／寬 1.85m</strong></li>
-            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 無法預約。此區單行道多，請依地圖箭頭行駛！滿位引導至投幣停車場（無優惠）。</li>
+            <li style="color:var(--accent);font-weight:700;">⚠️ 單行道多，請依箭頭行駛！滿位引導至投幣停車場（無優惠）。</li>
           </ul>
         </div>
         <div style="padding:6px;background:#f5f5f5;">
-          <img src="images/sapporo_maps.jpg" alt="札幌停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
+          <img src="images/sapporo_maps.jpg" alt="札幌停車場地圖" style="width:100%;height:120px;object-fit:cover;border-radius:4px;display:block;">
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;background:#f5f5f5;border-top:1px solid #eee;">
-        <img src="images/sapporo_view1.jpg" alt="札幌停車場實景1" style="width:100%;height:auto;object-fit:contain;display:block;">
-        <img src="images/sapporo_view2.jpg" alt="札幌停車場實景2" style="width:100%;height:auto;object-fit:contain;display:block;">
+        <img src="images/sapporo_view1.jpg" alt="札幌停車場實景1" style="width:100%;height:130px;object-fit:cover;border-radius:4px;display:block;">
+        <img src="images/sapporo_view2.jpg" alt="札幌停車場實景2" style="width:100%;height:130px;object-fit:cover;border-radius:4px;display:block;">
       </div>
     </div>
 
   </div>
 
-  <div class="page-footer" style="margin-top:10px;"></div>
-</div><!-- /parking-page -->
+  <div class="page-footer" style="margin-top:auto;"></div>
+</div><!-- /parking-page-2 -->
 
 
 <!-- ======================== 附錄：餐廳預約確認單 ======================== -->
-<div class="page" id="reservation-page" style="page-break-before:always;break-before:always;">
+<div class="page" id="reservation-page">
 
   <div class="page-header" style="padding:22px 32px 18px;">
     <div class="header-top">
@@ -2441,83 +2555,83 @@
     </div>
   </div>
 
-  <div class="page-body" style="padding:20px 28px 0;display:flex;flex-direction:column;gap:18px;">
+  <!-- 需求15: 第一筆較長，第二筆較短 -->
+  <div class="page-body short-day" style="padding:20px 28px 0;display:flex;flex-direction:column;gap:20px;">
 
-    <!-- ══════ 餐廳 1：小樽 といまぐろ ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
-      <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:12px;">
+    <!-- ══════ 餐廳 1：小樽 といまぐろ (佔版面較多) ══════ -->
+    <div class="reservation-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden; flex: 1.2;">
+      <div style="background:#1a1a2e;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:12px;">
         <span style="font-size:20px;">🥩</span>
         <div>
-          <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">小樽 Otaru &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 5/15（五）</div>
-          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">和牛海鮮天然本鮪専門店 といまぐろ</div>
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">小樽 Otaru &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 5/15（五）</div>
+          <div style="font-size:18px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">和牛海鮮天然本鮪専門店 といまぐろ</div>
         </div>
-        <div style="margin-left:auto;background:#2c7a4b;border-radius:5px;padding:4px 14px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;white-space:nowrap;">✅ 預約確認</div>
+        <div style="margin-left:auto;background:#2c7a4b;border-radius:5px;padding:4px 14px;font-size:14px;font-weight:700;font-family:'Helvetica Neue',sans-serif;white-space:nowrap;">✅ 預約確認</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:20px 22px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.6;">
-            <li style="margin-bottom:12px;">
+      <div style="display:grid;grid-template-columns:0.8fr 1.2fr;gap:0;align-items:stretch;height:100%;">
+        <div style="padding:24px 26px;border-right:1px solid #eee;display:flex;flex-direction:column;justify-content:center;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:18px;line-height:1.8;">
+            <li style="margin-bottom:16px;">
               📅 &nbsp;<strong>日期時間</strong><br>
               <span style="font-size:24px;font-weight:800;color:var(--accent);padding-left:28px;">5/15（五）12:00</span>
             </li>
-            <li style="margin-bottom:12px;">
+            <li style="margin-bottom:16px;">
               👥 &nbsp;<strong>預約人數</strong><br>
               <span style="font-size:24px;font-weight:800;color:#1a1a2e;padding-left:28px;">11 名</span>
             </li>
             <li>
               👤 &nbsp;<strong>預約代表</strong><br>
-              <span style="font-size:20px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
+              <span style="font-size:22px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
               <span style="font-size:14px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
             </li>
           </ul>
         </div>
-        <div style="padding:10px;background:#f5f5f5;">
-          <img src="images/reservation_otaru.jpg" alt="小樽餐廳預約確認" style="width:100%;height:auto;object-fit:contain;border-radius:8px;display:block;">
+        <div style="padding:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
+          <img src="images/reservation_otaru.jpg" alt="小樽餐廳預約確認" style="width:100%;height:320px;max-height:none !important;object-fit:contain;border-radius:8px;display:block;">
         </div>
       </div>
     </div>
 
-    <!-- ══════ 餐廳 2：札幌 The Sakura Buffet ══════ -->
-    <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
+    <!-- ══════ 餐廳 2：札幌 The Sakura Buffet (佔版面較少) ══════ -->
+    <div class="reservation-card" style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden; flex: 0.8;">
       <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:20px;">🌸</span>
+        <span style="font-size:18px;">🌸</span>
         <div>
           <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">札幌 Sapporo &nbsp;·&nbsp; Day 10 &nbsp;·&nbsp; 5/18（一）</div>
           <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">The Sakura Buffet</div>
         </div>
         <div style="margin-left:auto;background:#2c7a4b;border-radius:5px;padding:4px 14px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;white-space:nowrap;">✅ 預約確認</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:20px 22px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.6;">
-            <li style="margin-bottom:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;height:100%;">
+        <div style="padding:16px 20px;border-right:1px solid #eee;display:flex;flex-direction:column;justify-content:center;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:16px;line-height:1.6;">
+            <li style="margin-bottom:10px;">
               📅 &nbsp;<strong>日期時間</strong><br>
-              <span style="font-size:24px;font-weight:800;color:var(--accent);padding-left:28px;">5/18（一）18:30</span>
+              <span style="font-size:20px;font-weight:800;color:var(--accent);padding-left:28px;">5/18（一）18:30</span>
             </li>
-            <li style="margin-bottom:12px;">
+            <li style="margin-bottom:10px;">
               👥 &nbsp;<strong>預約人數</strong><br>
-              <span style="font-size:24px;font-weight:800;color:#1a1a2e;padding-left:28px;">7 名</span>
+              <span style="font-size:20px;font-weight:800;color:#1a1a2e;padding-left:28px;">7 名</span>
             </li>
-            <li style="margin-bottom:12px;">
+            <li style="margin-bottom:10px;">
               👤 &nbsp;<strong>預約代表</strong><br>
-              <span style="font-size:20px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
-              <span style="font-size:14px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
+              <span style="font-size:18px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
             </li>
             <li>
               🍽️ &nbsp;<strong>預約方案</strong><br>
-              <span style="font-size:17px;font-weight:700;color:#2c7a4b;padding-left:28px;">100 分鐘吃到飽（含飲料）</span>
+              <span style="font-size:15px;font-weight:700;color:#2c7a4b;padding-left:28px;">100 分鐘吃到飽（含飲料）</span>
             </li>
           </ul>
         </div>
-        <div style="padding:10px;background:#f5f5f5;">
-          <img src="images/reservation_sapporo.jpg" alt="札幌餐廳預約確認" style="width:100%;height:auto;object-fit:contain;border-radius:8px;display:block;">
+        <div style="padding:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
+          <img src="images/reservation_sapporo.jpg" alt="札幌餐廳預約確認" style="width:100%;height:220px;max-height:none !important;object-fit:contain;border-radius:8px;display:block;">
         </div>
       </div>
     </div>
 
   </div>
 
-  <div class="page-footer" style="margin-top:10px;"></div>
+  <div class="page-footer" style="margin-top:auto;"></div>
 
 </div><!-- /reservation-page -->
 
