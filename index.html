@@ -156,7 +156,7 @@
     break-inside: avoid;
   }
 
-  /* ── 時間欄：放大、醒目 ── */
+  /* ── 時間欄 ── */
   .tl-time {
     width: 84px;
     flex-shrink: 0;
@@ -239,7 +239,6 @@
     letter-spacing: 0.03em;
   }
 
-  /* ===== 票價資訊 ===== */
   .info-tag {
     display: inline-flex;
     align-items: center;
@@ -411,93 +410,89 @@
     font-weight: 700;
   }
 
-  /* ===== 列印設定 ===== */
+  /* ==============================================================
+     極限瘦身版：完美列印設定（解決 32 頁溢出問題）
+     ============================================================== */
   @media print {
-
-    /* ─ 全域列印基礎 ─ */
     *, *::before, *::after {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+      box-shadow: none !important; /* 拔除所有陰影以保證列印乾淨 */
     }
 
     html, body {
       background: #ffffff !important;
-      font-size: 14px;
-      margin: 0;
-      padding: 0;
+      font-size: 13.5px !important; /* 稍微縮小基礎字體 */
+      line-height: 1.45 !important; /* 收緊行距 */
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
     @page {
       size: A4 portrait;
-      margin: 1.5cm;
+      margin: 10mm 12mm; /* 極限縮小紙張邊界，爭取更多列印面積 */
     }
 
-    /* ─ 每個 .page 容器：自然高度，強制從新頁開始 ─ */
+    /* ─ 解除高度限制並強制分頁 ─ */
     .page {
-      width: 100%;
-      min-height: unset;
-      max-height: unset;
-      height: auto;
-      margin: 0;
-      padding: 0;
-      box-shadow: none;
-      overflow: visible;
-      /* 每頁都從新的一頁開始，且不在頁面中間被切斷 */
-      page-break-before: always;
-      break-before: always;
-      page-break-after: always;
-      break-after: always;
+      width: 100% !important;
+      min-height: unset !important;
+      max-height: unset !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      page-break-after: always !important;
+      break-after: page !important;
     }
 
-    /* 第一頁不需要在它之前強制換頁 */
-    .page:first-child {
-      page-break-before: avoid;
-      break-before: avoid;
+    /* ─ 大幅壓縮天地留白 ─ */
+    .page-header { padding: 12px 18px 10px !important; }
+    .page-body { padding: 10px 18px 0 !important; }
+    .page-footer { padding: 8px 18px 0 !important; margin-top: 8px !important; }
+    
+    .day-title { font-size: 22px !important; margin-top: 2px !important; }
+    .route-bar { margin-top: 8px !important; padding-top: 8px !important; font-size: 13px !important; }
+    .mileage-summary { margin-bottom: 8px !important; }
+
+    /* ─ 壓縮時間軸與卡片間距 ─ */
+    .tl-item { margin-bottom: 8px !important; page-break-inside: avoid !important; break-inside: avoid !important; }
+    .tl-content { padding-bottom: 0 !important; }
+    .spot-name { font-size: 15.5px !important; margin-bottom: 2px !important; }
+    .spot-desc { font-size: 12.5px !important; margin-bottom: 2px !important; line-height: 1.4 !important; }
+
+    .drive-card { 
+      padding: 6px 12px !important; 
+      margin: 0 0 8px 84px !important; 
+      gap: 10px !important; 
+      page-break-inside: avoid !important; 
+      break-inside: avoid !important; 
+    }
+    .drive-icon { font-size: 18px !important; }
+    .drive-stat-value { font-size: 14px !important; }
+
+    /* ─ 壓縮頁尾高度 ─ */
+    .hotel-summary { padding: 6px 12px !important; margin-bottom: 8px !important; font-size: 13px !important; }
+    .footer-summary { gap: 6px !important; margin-bottom: 6px !important; }
+    .meal-item { padding: 6px 10px !important; }
+    .meal-value { font-size: 12px !important; margin-top: 1px !important; }
+    
+    .notes-section { padding: 4px 0 6px !important; }
+    .notes-title { margin-bottom: 2px !important; }
+    .notes-line { height: 18px !important; } /* 筆記線距縮小 */
+
+    /* ─ 圖片高度封印：避免單張圖過長迫使版面腰斬 ─ */
+    img {
+      max-height: 250px !important;
+      width: auto !important;
+      max-width: 100% !important;
     }
 
-    /* ─ 頁首區塊：不被切斷 ─ */
-    .page-header {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-
-    /* ─ 時間軸每個項目：不被切斷 ─ */
-    .tl-item {
+    /* 確保表格等區塊不被切斷 */
+    table, tr, .checklist-warning {
       page-break-inside: avoid !important;
       break-inside: avoid !important;
     }
-
-    /* ─ 自駕路段框：不被切斷 ─ */
-    .drive-card {
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-    }
-
-    /* ─ 頁尾：不被切斷 ─ */
-    .page-footer {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    /* ─ 航班卡片、行李提醒框：不被切斷 ─ */
-    .flight-card,
-    .checklist-warning,
-    table,
-    tr {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    /* ─ 表格不跨頁 ─ */
     table { border-collapse: collapse; }
-
-    /* ─ 筆記線高度 ─ */
-    .notes-line { height: 26px; }
-
-    /* ─ 螢幕陰影清除 ─ */
-    * { box-shadow: none !important; }
   }
 
   /* ===== 響應式螢幕預覽 ===== */
@@ -607,7 +602,7 @@
     </div>
 
     <!-- 行李與報到提醒 -->
-    <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:12px 18px;">
+    <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:12px 18px;" class="checklist-warning">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#3a6fd8;margin-bottom:8px;">⚠️ 行李與報到提醒</div>
       <div style="font-size:13.5px;color:var(--ink-mid);font-family:'Helvetica Neue',sans-serif;line-height:2;">
         📄 &nbsp;請準備好<strong style="color:var(--ink);">護照</strong>，隨時備查。<br>
@@ -628,8 +623,6 @@
 
 <!-- ======================== DAY 1 ======================== -->
 <div class="page">
-
-  <!-- 頁首 -->
   <div class="page-header">
     <div class="header-top">
       <div>
@@ -647,19 +640,14 @@
     </div>
   </div>
 
-  <!-- 主體 -->
   <div class="page-body">
-
-    <!-- 里程摘要 -->
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>80 km</strong></div>
       <div class="mile-chip">累計里程 <strong>80 km</strong></div>
       <div class="mile-chip">加油提醒 <strong>80 km</strong></div>
     </div>
 
     <div class="timeline">
-
-      <!-- 航班 -->
       <div class="tl-item">
         <div class="tl-time">08:00<br>↓<br>12:55</div>
         <div class="tl-dot"></div>
@@ -669,7 +657,6 @@
         </div>
       </div>
 
-      <!-- 租車 -->
       <div class="tl-item">
         <div class="tl-time">12:55<br>↓<br>15:30</div>
         <div class="tl-dot"></div>
@@ -679,26 +666,15 @@
         </div>
       </div>
 
-      <!-- 自駕段 1 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
-          <div class="drive-stat">
-            <div class="drive-stat-label">車程時間</div>
-            <div class="drive-stat-value">35 分鐘</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">行車里程</div>
-            <div class="drive-stat-value">28 km</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">方向</div>
-            <div class="drive-stat-value" style="font-size:13px;padding-top:3px;">新千歲空港 → 苫小牧</div>
-          </div>
+          <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">35 分鐘</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">28 km</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">方向</div><div class="drive-stat-value" style="font-size:13px;padding-top:3px;">新千歲空港 → 苫小牧</div></div>
         </div>
       </div>
 
-      <!-- 超市 -->
       <div class="tl-item">
         <div class="tl-time">16:05<br>↓<br>16:50</div>
         <div class="tl-dot"></div>
@@ -708,26 +684,15 @@
         </div>
       </div>
 
-      <!-- 自駕段 2 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
-          <div class="drive-stat">
-            <div class="drive-stat-label">車程時間</div>
-            <div class="drive-stat-value">55 分鐘</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">行車里程</div>
-            <div class="drive-stat-value">50 km</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">方向</div>
-            <div class="drive-stat-value" style="font-size:13px;padding-top:3px;">苫小牧 → 登別</div>
-          </div>
+          <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">55 分鐘</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">50 km</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">方向</div><div class="drive-stat-value" style="font-size:13px;padding-top:3px;">苫小牧 → 登別</div></div>
         </div>
       </div>
 
-      <!-- 飯店 -->
       <div class="tl-item">
         <div class="tl-time">17:45<br>↓<br>隔日</div>
         <div class="tl-dot"></div>
@@ -735,18 +700,13 @@
           <div class="spot-name">🏨 登別 石水亭 ── 入住</div>
           <div class="spot-desc">抵達老字號溫泉旅館，第一天請好好休息。享用飯店準備的豐盛晚餐，並泡一個道地的硫磺泉，舒緩長途飛行的疲憊。</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
-            <div class="nav-badge">
-              <span class="nav-badge-icon">📞</span>
-              <span class="nav-badge-text">導航電話：0570-026-570</span>
-            </div>
+            <div class="nav-badge"><span class="nav-badge-icon">📞</span><span class="nav-badge-text">導航電話：0570-026-570</span></div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /timeline -->
-  </div><!-- /page-body -->
-
-  <!-- 頁尾 -->
   <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
@@ -754,37 +714,22 @@
       <span class="hotel-phone">📞 0570-026-570</span>
     </div>
     <div class="footer-summary">
-      <div class="meal-item">
-        <div class="meal-label">🌅 早餐</div>
-        <div class="meal-value">自理<br><span style="font-size:12px;color:#888">（機上或空港）</span></div>
-      </div>
-      <div class="meal-item">
-        <div class="meal-label">☀️ 午餐</div>
-        <div class="meal-value">自理<br><span style="font-size:12px;color:#888">（機場美食街）</span></div>
-      </div>
-      <div class="meal-item">
-        <div class="meal-label">🌙 晚餐</div>
-        <div class="meal-value">飯店晚餐<br><span style="font-size:12px;color:#888">（石水亭）</span></div>
-      </div>
+      <div class="meal-item"><div class="meal-label">🌅 早餐</div><div class="meal-value">自理<br><span style="font-size:12px;color:#888">（機上或空港）</span></div></div>
+      <div class="meal-item"><div class="meal-label">☀️ 午餐</div><div class="meal-value">自理<br><span style="font-size:12px;color:#888">（機場美食街）</span></div></div>
+      <div class="meal-item"><div class="meal-label">🌙 晚餐</div><div class="meal-value">飯店晚餐<br><span style="font-size:12px;color:#888">（石水亭）</span></div></div>
     </div>
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
-
 </div><!-- /page day1 -->
 
 
 <!-- ======================== DAY 2 ======================== -->
 <div class="page">
-
-  <!-- 頁首 -->
   <div class="page-header">
     <div class="header-top">
       <div>
@@ -798,23 +743,18 @@
       </div>
     </div>
     <div class="route-bar">
-      <strong>今日路線：</strong>地獄谷散步 &nbsp;→&nbsp; 浮見堂公園 &nbsp;→&nbsp; 洞爺水之驛食堂 &nbsp;→&nbsp; SAIRO 展望台 &nbsp;→&nbsp; 月浦展望台 &nbsp;→&nbsp; 有珠山纜車 &nbsp;→&nbsp; 洞爺觀光酒店 &nbsp;→&nbsp; 湖畔煙火
+      <strong>今日路線：</strong>地獄谷散步 &nbsp;→&nbsp; 浮見堂公園 &nbsp;→&nbsp; 洞爺水之驛食堂 &nbsp;→&nbsp; SAIRO 展望台 &nbsp;→&nbsp; 月浦展望台 &nbsp;→&nbsp; 有珠山纜車 &nbsp;→&nbsp; 洞爺觀光酒店
     </div>
   </div>
 
-  <!-- 主體 -->
   <div class="page-body">
-
-    <!-- 里程摘要 -->
-    <div class="mileage-summary" style="margin-bottom:12px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>90 km</strong></div>
       <div class="mile-chip">累計里程 <strong>170 km</strong></div>
       <div class="mile-chip">加油提醒 <strong>170 km</strong></div>
     </div>
 
     <div class="timeline">
-
-      <!-- 早餐 -->
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -824,56 +764,42 @@
         </div>
       </div>
 
-      <!-- 地獄谷 -->
       <div class="tl-item">
         <div class="tl-time">08:00<br>↓<br>09:45</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🌋 地獄谷散步 ＋ 退房</div>
-          <div class="spot-desc">登別最著名的火山地貌，沿平緩木棧道漫步，近距離觀賞壯觀的硫磺煙霧奇景。散步後辦理退房。</div>
+          <div class="spot-desc">沿平緩木棧道漫步，近距離觀賞壯觀的硫磺煙霧奇景。散步後辦理退房。</div>
         </div>
       </div>
 
-      <!-- 自駕段 1 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
-          <div class="drive-stat">
-            <div class="drive-stat-label">車程時間</div>
-            <div class="drive-stat-value">70 分鐘</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">行車里程</div>
-            <div class="drive-stat-value">57.5 km</div>
-          </div>
-          <div class="drive-stat">
-            <div class="drive-stat-label">方向</div>
-            <div class="drive-stat-value" style="font-size:13px;padding-top:3px;">登別 → 洞爺湖</div>
-          </div>
+          <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">70 分鐘</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">57.5 km</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">登別 → 洞爺湖</div></div>
         </div>
       </div>
 
-      <!-- 浮見堂 -->
       <div class="tl-item">
         <div class="tl-time">11:00<br>↓<br>11:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">⛩ 浮見堂公園（夢洞爺）</div>
-          <div class="spot-desc">湖畔精緻小公園，湖面上有古色古香的雙層涼亭，是拍攝寧靜湖景的絕佳打卡點。</div>
+          <div class="spot-desc">湖畔精緻小公園，是拍攝寧靜湖景的絕佳打卡點。</div>
         </div>
       </div>
 
-      <!-- 自駕段 2 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">1.1 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">浮見堂 → 洞爺水之驛</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">浮見堂 → 水之驛</div></div>
         </div>
       </div>
 
-      <!-- 食堂 -->
       <div class="tl-item">
         <div class="tl-time">11:35<br>↓<br>12:35</div>
         <div class="tl-dot"></div>
@@ -883,27 +809,24 @@
         </div>
       </div>
 
-      <!-- 自駕段 3 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">8 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">5.7 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">水之驛 → SAIRO 展望台</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">水之驛 → SAIRO</div></div>
         </div>
       </div>
 
-      <!-- SAIRO -->
       <div class="tl-item">
         <div class="tl-time">12:45<br>↓<br>13:15</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🔭 SAIRO 展望台</div>
-          <div class="spot-desc">洞爺湖最經典觀景台，從高處將整個洞爺湖、湖中島嶼與周邊群山全景盡收眼底。</div>
+          <div class="spot-desc">從高處將整個洞爺湖、湖中島嶼與周邊群山全景盡收眼底。</div>
         </div>
       </div>
 
-      <!-- 自駕段 4 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
@@ -913,7 +836,6 @@
         </div>
       </div>
 
-      <!-- 月浦 -->
       <div class="tl-item">
         <div class="tl-time">13:25<br>↓<br>13:55</div>
         <div class="tl-dot"></div>
@@ -923,17 +845,15 @@
         </div>
       </div>
 
-      <!-- 自駕段 5 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">17 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">11.8 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">月浦 → 昭和新山纜車</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">月浦 → 有珠山纜車</div></div>
         </div>
       </div>
 
-      <!-- 纜車 -->
       <div class="tl-item">
         <div class="tl-time">14:15<br>↓<br>15:45</div>
         <div class="tl-dot"></div>
@@ -942,42 +862,33 @@
           <div class="spot-desc">搭乘纜車直達山頂，俯瞰洞爺湖全景，並近距離感受活火山「昭和新山」的壯麗魄力。</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
             <div class="info-tag">🎫 來回票 2,000円／人</div>
-            <div class="info-tag">🕐 每 15 分鐘一班（整點 00、15、30、45 分）</div>
           </div>
         </div>
       </div>
 
-      <!-- 自駕段 6 -->
       <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">10 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">6.4 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">纜車站 → 洞爺觀光酒店</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">纜車站 → 觀光酒店</div></div>
         </div>
       </div>
 
-      <!-- 飯店 + 煙火 -->
       <div class="tl-item">
         <div class="tl-time">16:00<br>↓<br>隔日</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🏨 洞爺觀光酒店 ── 入住</div>
-          <div class="spot-desc">辦理入住後可於湖邊散步，享用飯店晚餐。<br>
-          <strong style="color:var(--accent)">✨ 20:45–21:05</strong>：洞爺湖夏季限定水上煙火大會（全長 20 分鐘），飯後漫步至湖畔即可欣賞！</div>
+          <div class="spot-desc">辦理入住後可於湖邊散步，享用飯店晚餐。<strong style="color:var(--accent)">✨ 20:45–21:05</strong>：洞爺湖夏季限定水上煙火大會！</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
-            <div class="nav-badge">
-              <span class="nav-badge-icon">📞</span>
-              <span class="nav-badge-text">導航電話：0142-75-2111</span>
-            </div>
+            <div class="nav-badge"><span class="nav-badge-icon">📞</span><span class="nav-badge-text">導航電話：0142-75-2111</span></div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /timeline -->
-  </div><!-- /page-body -->
-
-  <!-- 頁尾 -->
   <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
@@ -985,30 +896,17 @@
       <span class="hotel-phone">📞 0142-75-2111</span>
     </div>
     <div class="footer-summary">
-      <div class="meal-item">
-        <div class="meal-label">🌅 早餐</div>
-        <div class="meal-value">飯店早餐<br><span style="font-size:12px;color:#888">（石水亭）</span></div>
-      </div>
-      <div class="meal-item">
-        <div class="meal-label">☀️ 午餐</div>
-        <div class="meal-value">洞爺水之驛<br><span style="font-size:12px;color:#888">食堂 TSUDOU</span></div>
-      </div>
-      <div class="meal-item">
-        <div class="meal-label">🌙 晚餐</div>
-        <div class="meal-value">飯店晚餐<br><span style="font-size:12px;color:#888">（洞爺觀光酒店）</span></div>
-      </div>
+      <div class="meal-item"><div class="meal-label">🌅 早餐</div><div class="meal-value">飯店早餐<br><span style="font-size:12px;color:#888">（石水亭）</span></div></div>
+      <div class="meal-item"><div class="meal-label">☀️ 午餐</div><div class="meal-value">洞爺水之驛<br><span style="font-size:12px;color:#888">食堂 TSUDOU</span></div></div>
+      <div class="meal-item"><div class="meal-label">🌙 晚餐</div><div class="meal-value">飯店晚餐<br><span style="font-size:12px;color:#888">（洞爺觀光酒店）</span></div></div>
     </div>
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
-        <div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
-
 </div><!-- /page day2 -->
 
 
@@ -1031,13 +929,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>165 km</strong></div>
       <div class="mile-chip">累計里程 <strong>335 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>335 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -1138,7 +1035,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1164,13 +1061,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:12px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>200 km</strong></div>
       <div class="mile-chip">累計里程 <strong>535 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>535 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -1233,7 +1129,6 @@
           <div class="spot-desc">北海道唯一的日式城堡，散步感受濃厚歷史氛圍。</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
             <div class="info-tag">🎫 團體票（10人以上）290円／人</div>
-            <div class="info-tag">🚶 步行至食堂 5 分鐘 / 0.3 km</div>
           </div>
         </div>
       </div>
@@ -1243,7 +1138,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🐦 ka mo me 食堂（海鷗食堂）</div>
-          <div class="spot-desc">當地特色食堂，推薦品嚐新鮮海產料理補充體力。步行 5 分鐘（0.3 km）可抵達，13:45 返回駐車場出發。</div>
+          <div class="spot-desc">當地特色食堂，步行 5 分鐘可抵達，13:45 返回駐車場出發。</div>
         </div>
       </div>
 
@@ -1279,14 +1174,12 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🌃 函館山夜景</div>
-          <div class="spot-desc">返回飯店休息後，晚餐推薦「小丑漢堡」或「根室花丸壽司」。飯後搭纜車欣賞世界三大夜景之一的函館山夜景！</div>
+          <div class="spot-desc">返回飯店休息後，搭纜車欣賞世界三大夜景之一的函館山夜景！</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
-            <div class="info-tag">🚡 纜車 1,800円／人（每 15 分鐘一班）</div>
-            <div class="info-tag">🚃 回程電車 250円（十字街→函館站前，請備零錢）</div>
+            <div class="info-tag">🚡 纜車 1,800円／人</div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -1303,7 +1196,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1325,17 +1218,16 @@
       </div>
     </div>
     <div class="route-bar">
-      <strong>今日路線：</strong>加油 &nbsp;→&nbsp; 女子修道院 &nbsp;→&nbsp; 大沼公園 &nbsp;→&nbsp; 食堂菜之花（午餐） &nbsp;→&nbsp; 惠山火山 &amp; 杜鵑花公園 &nbsp;→&nbsp; 五稜郭公園
+      <strong>今日路線：</strong>加油 &nbsp;→&nbsp; 女子修道院 &nbsp;→&nbsp; 大沼公園 &nbsp;→&nbsp; 食堂菜之花（午餐） &nbsp;→&nbsp; 惠山火山 &nbsp;→&nbsp; 五稜郭公園
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:12px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>170 km</strong></div>
       <div class="mile-chip">累計里程 <strong>705 km</strong></div>
       <div class="mile-chip">⛽ 今日加油 <strong>160 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
@@ -1394,7 +1286,7 @@
         <div class="tl-time">10:35<br>↓<br>11:20</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
-          <div class="spot-name">🌿 大沼國定公園 ＆ 大沼公園</div>
+          <div class="spot-name">🌿 大沼國定公園</div>
           <div class="spot-desc">風景如畫的湖泊公園，沿著湖畔步道輕鬆漫步，欣賞駒岳火山倒映在湖面的自然美景。</div>
         </div>
       </div>
@@ -1431,7 +1323,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🌋 惠山自然公園 ＆ 杜鵑花公園</div>
-          <div class="spot-desc">從火口原停車場近距離觀看惠山活火山地貌（13:35–13:50），隨後步行 5 分鐘（2.8 km 開車）至杜鵑花公園──五月正值花季，整座山頭開滿紅艷杜鵑，景色壯觀。</div>
+          <div class="spot-desc">從火口原停車場觀看活火山地貌，五月正值花季，整座山頭開滿紅艷杜鵑，景色壯觀。</div>
         </div>
       </div>
 
@@ -1462,14 +1354,6 @@
         </div>
       </div>
 
-      <div class="tl-item">
-        <div class="tl-time">17:45<br>↓</div>
-        <div class="tl-dot"></div>
-        <div class="tl-content">
-          <div class="spot-name">🏨 返回飯店休息與晚餐（自理）</div>
-        </div>
-      </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -1486,7 +1370,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1512,13 +1396,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>235 km</strong></div>
       <div class="mile-chip">累計里程 <strong>940 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>395 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:40</div>
         <div class="tl-dot"></div>
@@ -1590,10 +1473,9 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🏮 小樽運河 ＆ 周邊散步 ＆ 晚餐</div>
-          <div class="spot-desc">漫步於充滿浪漫氛圍的小樽運河畔，欣賞舊倉庫群與迷人的夜景。傍晚燈籠亮起時最為美麗，記得多拍照留念，並在附近選擇心儀的餐廳享用晚餐。</div>
+          <div class="spot-desc">漫步於充滿浪漫氛圍的小樽運河畔，欣賞舊倉庫群與迷人的夜景。傍晚燈籠亮起時最為美麗。</div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -1610,7 +1492,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1632,17 +1514,16 @@
       </div>
     </div>
     <div class="route-bar">
-      <strong>今日路線：</strong>小樽運河 &amp; 銀之鐘 1 號館 &nbsp;→&nbsp; といまぐろ（午餐） &nbsp;→&nbsp; 道之驛鶴沼 &nbsp;→&nbsp; 加油 &nbsp;→&nbsp; 旭川 Court Hotel &nbsp;→&nbsp; 永旺購物中心（晚餐）
+      <strong>今日路線：</strong>小樽運河 &amp; 銀之鐘 1 號館 &nbsp;→&nbsp; といまぐろ（午餐） &nbsp;→&nbsp; 道之驛鶴沼 &nbsp;→&nbsp; 加油 &nbsp;→&nbsp; 旭川 Court Hotel &nbsp;→&nbsp; 永旺購物中心
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>156 km</strong></div>
       <div class="mile-chip">累計里程 <strong>1,096 km</strong></div>
       <div class="mile-chip">⛽ 今日加油 <strong>50 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -1725,7 +1606,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -1742,7 +1622,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1768,13 +1648,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>140 km</strong></div>
       <div class="mile-chip">累計里程 <strong>1,236 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>190 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>09:00</div>
         <div class="tl-dot"></div>
@@ -1798,7 +1677,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">💧 層雲峽──流星 &amp; 銀河瀑布</div>
-          <div class="spot-desc">觀賞入選日本百大瀑布的雙瀑布。流星瀑布（落差 90m）與銀河瀑布（落差 120m）並列而立，氣勢磅礡，峽谷景色令人嘆為觀止。</div>
+          <div class="spot-desc">觀賞入選日本百大瀑布的雙瀑布。流星與銀河瀑布並列而立，氣勢磅礡。</div>
         </div>
       </div>
 
@@ -1834,7 +1713,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🍶 男山酒造資料館</div>
-          <div class="spot-desc">參觀著名的日本酒造，了解釀酒歷史，並可選購優質的日本酒作為伴手禮，帶回台灣分享。</div>
+          <div class="spot-desc">參觀著名的日本酒造，了解釀酒歷史，並可選購優質的日本酒作為伴手禮。</div>
         </div>
       </div>
 
@@ -1852,10 +1731,9 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🌿 北彩都公園散步 ＆ 晚餐（自理）</div>
-          <div class="spot-desc">返回飯店稍作休息後，可前往車站後方廣闊的「北彩都公園」水岸漫步，欣賞石狩川畔的黃昏風光，再享用晚餐。</div>
+          <div class="spot-desc">返回飯店稍作休息後，可前往車站後方廣闊的「北彩都公園」水岸漫步，再享用晚餐。</div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -1872,7 +1750,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -1898,13 +1776,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:12px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>186 km</strong></div>
       <div class="mile-chip">累計里程 <strong>1,422 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>376 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>09:00</div>
         <div class="tl-dot"></div>
@@ -1928,7 +1805,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🌷 四季彩之丘</div>
-          <div class="spot-desc">五月份可欣賞大片盛開的鬱金香、杜鵑與三色堇花海，色彩繽紛壯觀。附設免費停車場。</div>
+          <div class="spot-desc">五月份可欣賞大片盛開的鬱金香、杜鵑與三色堇花海，色彩繽紛壯觀。</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
             <div class="info-tag">🎫 團體票（10人以上）700円／人</div>
           </div>
@@ -1949,7 +1826,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">💐 富田農場</div>
-          <div class="spot-desc">北海道最知名農場之一，悠閒漫步欣賞溫室花卉。五月可看到薰衣草提前開放。免費入場與停車。</div>
+          <div class="spot-desc">北海道最知名農場之一，悠閒漫步欣賞溫室花卉。五月可看到薰衣草提前開放。</div>
         </div>
       </div>
 
@@ -1985,7 +1862,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🧚 精靈露臺</div>
-          <div class="spot-desc">隱藏在森林中的童話小木屋市集，販售各式手作藝品，宛如走入精靈村莊，是拍照打卡的秘境。</div>
+          <div class="spot-desc">隱藏在森林中的童話小木屋市集，販售各式手作藝品，宛如走入精靈村莊。</div>
         </div>
       </div>
 
@@ -2027,7 +1904,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -2044,7 +1920,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -2070,13 +1946,12 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom:14px;">
+    <div class="mileage-summary">
       <div class="mile-chip">今日行駛 <strong>77 km</strong></div>
       <div class="mile-chip">累計里程 <strong>1,499 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>453 km</strong></div>
     </div>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
@@ -2100,7 +1975,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">♨️ 定山溪──定杉源泉公園 · 二見吊橋</div>
-          <div class="spot-desc">悠閒的溫泉鄉，漫步過二見吊橋欣賞溪谷美景，並在公園泡免費足湯、煮溫泉蛋，體驗北海道溫泉鄉的愜意時光。</div>
+          <div class="spot-desc">悠閒的溫泉鄉，漫步過二見吊橋欣賞溪谷美景，體驗北海道溫泉鄉的愜意時光。</div>
         </div>
       </div>
 
@@ -2109,7 +1984,7 @@
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">48 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">35 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">定山溪 → 三井 Outlet 北廣島</div></div>
+          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">定山溪 → 三井 Outlet</div></div>
         </div>
       </div>
 
@@ -2118,7 +1993,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🛍 三井 Outlet Park 北廣島（午餐 ＆ 逛街）</div>
-          <div class="spot-desc">北海道大型 Outlet 商場，適合長輩在此舒適地挑選伴手禮與服飾。午餐可於美食街自由選擇，整整三小時盡情採購！</div>
+          <div class="spot-desc">北海道大型 Outlet 商場，適合長輩在此舒適地挑選伴手禮與服飾，整整三小時盡情採購！</div>
         </div>
       </div>
 
@@ -2136,7 +2011,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🏙 返回飯店休息 ➡ 札幌市區散步</div>
-          <div class="spot-desc">稍作休息後，步行遊覽札幌最具代表性的城市地標，包括時計台、電視塔、紅磚舍廳與大通公園，感受美好的城市風情。</div>
+          <div class="spot-desc">稍作休息後，步行遊覽札幌最具代表性的城市地標：時計台、電視塔與大通公園。</div>
         </div>
       </div>
 
@@ -2148,7 +2023,6 @@
           <div class="spot-desc">享用豪華的百匯自助餐，用豐盛的美食大餐慰勞長途自駕的辛勞，為旅程最後一個夜晚留下美好回憶！</div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="page-footer">
@@ -2165,7 +2039,7 @@
     <div class="notes-section">
       <div class="notes-title">Notes &nbsp;／&nbsp; 備忘手記</div>
       <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
+        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
       </div>
     </div>
   </div>
@@ -2198,7 +2072,7 @@
     </div>
 
     <!-- 回程注意事項 -->
-    <div style="background:#f8f0ff;border:2px solid #9966cc;border-radius:8px;padding:14px 18px;margin-bottom:18px;">
+    <div style="background:#f8f0ff;border:2px solid #9966cc;border-radius:8px;padding:14px 18px;margin-bottom:18px;" class="checklist-warning">
       <div style="font-size:13px;font-weight:700;color:#663399;letter-spacing:0.1em;font-family:'Helvetica Neue',sans-serif;margin-bottom:8px;">⚠️ 還車前必確認清單</div>
       <div style="font-size:13px;color:#444;font-family:'Helvetica Neue',sans-serif;line-height:1.9;">
         ✅ &nbsp;加滿油箱（COSMO 加油站，機場附近）<br>
@@ -2210,7 +2084,6 @@
     </div>
 
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -2261,7 +2134,7 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">✈ 新千歲機場──報到 · 購物 · 午餐</div>
-          <div class="spot-desc">新千歲機場內美食與伴手禮選擇豐富，是最後採購的好機會！建議預留至少 2 小時在機場享用午餐與購物。</div>
+          <div class="spot-desc">機場內美食與伴手禮豐富，是最後採購好機會！建議預留至少 2 小時。</div>
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">
             <div class="info-tag">✈ IT261｜新千歲 13:55 → 高雄 18:05</div>
           </div>
@@ -2273,26 +2146,20 @@
         <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="spot-name">🏠 啟程回家──IT261 新千歲 ✈ 高雄小港</div>
-          <div class="spot-desc" style="color:var(--accent);font-weight:600;">北海道 11 天、11 夜、1,530 公里的壯麗旅程，圓滿結束！帶著滿滿的回憶與伴手禮，平安回到台灣！</div>
+          <div class="spot-desc" style="color:var(--accent);font-weight:600;">北海道 11 天、1,530 公里的壯麗旅程，圓滿結束！</div>
         </div>
       </div>
 
     </div>
   </div>
   <div class="page-footer">
-    <div style="background:linear-gradient(135deg,#1a1a2e,#c0392b);border-radius:6px;padding:12px 18px;margin-bottom:14px;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:14px;text-align:center;letter-spacing:0.05em;">
+    <div style="background:linear-gradient(135deg,#1a1a2e,#c0392b);border-radius:6px;padding:8px 18px;margin-bottom:10px;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:14px;text-align:center;letter-spacing:0.05em;">
       🎉 &nbsp;<strong style="font-size:16px;">感謝同行！旅途愉快，平安返家！</strong>&nbsp; 🎉
     </div>
     <div class="footer-summary">
       <div class="meal-item"><div class="meal-label">🌅 早餐</div><div class="meal-value">飯店早餐<br><span style="font-size:12px;color:#888">（東急 STAY）</span></div></div>
       <div class="meal-item"><div class="meal-label">☀️ 午餐</div><div class="meal-value">新千歲機場<br><span style="font-size:12px;color:#888">機場美食街</span></div></div>
       <div class="meal-item"><div class="meal-label">🌙 晚餐</div><div class="meal-value">機上或回台<br><span style="font-size:12px;color:#888">自行安排</span></div></div>
-    </div>
-    <div class="notes-section">
-      <div class="notes-title">Notes &nbsp;／&nbsp; 旅行總心得</div>
-      <div class="notes-lines">
-        <div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div><div class="notes-line"></div>
-      </div>
     </div>
   </div>
 </div><!-- /page day11 -->
@@ -2316,8 +2183,6 @@
   </div>
 
   <div class="page-body" style="padding:18px 28px 0;">
-
-    <!-- 表格容器 -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
 
       <!-- ─── 出國相關文件 ─── -->
@@ -2335,7 +2200,7 @@
             <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照影本</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">護照遺失時可派上用場，建議與正本分開放</td></tr>
             <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">護照包</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">重要證件、現金、駕照譯本隨身攜帶</td></tr>
             <tr><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">信用卡</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">若住宿已刷卡預付，建議攜帶同一張以便核對</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">飯店住宿確認信</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">部分飯店需出示確認書才能辦理入住</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 10px;text-align:center;font-size:16px;">□</td><td style="border:1px solid #ddd;padding:5px 12px;font-weight:600;color:var(--ink);">飯店確認信</td><td style="border:1px solid #ddd;padding:5px 12px;color:var(--ink-mid);">部分飯店需出示確認書才能辦理入住</td></tr>
           </tbody>
         </table>
       </div>
@@ -2352,9 +2217,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">清潔保養</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">護髮素、洗面粉、牙膏牙刷、壓縮毛巾、卸妝棉</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">隨身用品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">化妝包、衛生紙、濕紙巾、酒精擦</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">藥品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">蚊蟲藥、眼藥水、感冒藥、過敏藥、OK繃、護唇膏</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">清潔保養</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">洗臉、牙刷、壓縮毛巾、卸妝</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">隨身用品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">衛生紙、濕紙巾、酒精擦</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#2c5f2e;font-size:12px;">藥品</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">蚊蟲藥、感冒藥、過敏藥、OK繃</td></tr>
           </tbody>
         </table>
       </div>
@@ -2371,15 +2236,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">貼身衣物</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">內衣褲、睡衣褲、發熱衣、4套衣服、洗衣球、洗衣袋</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">外套配件</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">風衣、背心、帽子、墨鏡、圍巾、飾品</td></tr>
-            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">鞋襪 · 錢包</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">拖鞋、襪子、錢包、零錢包</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">貼身衣物</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">內衣褲、睡衣、4套衣服、洗衣袋</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">外套配件</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">風衣、背心、帽子、墨鏡</td></tr>
+            <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#5a3e8a;font-size:12px;">鞋襪錢包</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">拖鞋、襪子、錢包、零錢包</td></tr>
           </tbody>
         </table>
       </div>
 
       <!-- ─── 3C 用品 ─── -->
-      <div>
+      <div style="grid-column:1 / -1;">
         <div style="background:#b85c00;color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">📱 &nbsp;3C 用品</div>
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead>
@@ -2391,48 +2256,26 @@
           </thead>
           <tbody>
             <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">充電器</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">3-in-1（耳機、手錶、手機）</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:var(--accent);">行動電源 🔋</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;"><strong style="color:var(--accent);">隨身攜帶，不可托運</strong>。請先充飽電，每人限帶 2 個</td></tr>
+            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:var(--accent);">行動電源 🔋</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;"><strong style="color:var(--accent);">隨身攜帶，不可托運</strong>。每人限帶 2 個</td></tr>
             <tr><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">eSIM 卡</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">出發前一天先行開通，確認可正常使用</td></tr>
-            <tr style="background:#fafafa;"><td style="border:1px solid #ddd;padding:5px 8px;text-align:center;font-size:15px;">□</td><td style="border:1px solid #ddd;padding:5px 10px;font-weight:600;color:#b85c00;">自拍棒</td><td style="border:1px solid #ddd;padding:5px 10px;color:var(--ink-mid);font-size:12px;">依民航局規定攜帶，收合 &gt;60cm 者須托運</td></tr>
           </tbody>
         </table>
       </div>
 
-      <!-- ─── 只能托運的物品（跨欄） ─── -->
-      <div style="grid-column:1 / -1;">
-        <div style="background:var(--accent);color:#fff;font-family:'Helvetica Neue',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:6px 14px;border-radius:6px 6px 0 0;">⚠️ &nbsp;只能托運的物品（請勿放入隨身行李）</div>
-        <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
-          <tbody>
-            <tr>
-              <td style="border:1px solid #ddd;padding:7px 14px;width:32px;text-align:center;font-size:16px;vertical-align:top;">1</td>
-              <td style="border:1px solid #ddd;padding:7px 14px;color:var(--ink-mid);">管徑一公分以上<strong style="color:var(--ink);">且</strong>可伸縮，且收合後高度超過 60 公分以上的自拍棒。</td>
-            </tr>
-            <tr style="background:#fafafa;">
-              <td style="border:1px solid #ddd;padding:7px 14px;text-align:center;font-size:16px;vertical-align:top;">2</td>
-              <td style="border:1px solid #ddd;padding:7px 14px;color:var(--ink-mid);">含有 <strong style="color:var(--ink);">24–70% 酒精飲料</strong>，必須以零售包裝托運，每人攜帶總量不得超過 <strong style="color:var(--ink);">5 公升</strong>。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div><!-- /grid -->
-  </div><!-- /page-body -->
-
-  <div class="page-footer" style="margin-top:12px;">
+    </div>
   </div>
 
+  <div class="page-footer" style="margin-top:12px;"></div>
 </div><!-- /packing-page -->
 
 
 <!-- ======================== 附錄：停車場指南 ======================== -->
-<div class="page" id="parking-page" style="page-break-before: always; break-before: always;">
-
+<div class="page" id="parking-page">
   <div class="page-header" style="padding:22px 32px 18px;">
     <div class="header-top">
       <div>
         <div class="day-label" style="letter-spacing:0.25em;">Appendix &nbsp;·&nbsp; 附錄</div>
-        <div class="day-title" style="font-size:22px;margin-top:4px;">🅿️ 四大市區飯店：停車場導航與實景指南</div>
-        <div class="day-date" style="margin-top:4px;">函館 · 小樽 · 旭川 · 札幌</div>
+        <div class="day-title" style="font-size:22px;margin-top:4px;">🅿️ 四大市區飯店停車指南</div>
       </div>
       <div style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;padding:10px 16px;text-align:center;flex-shrink:0;font-family:'Helvetica Neue',sans-serif;">
         <div style="font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.6);text-transform:uppercase;">飯店數</div>
@@ -2441,7 +2284,7 @@
     </div>
   </div>
 
-  <div class="page-body" style="padding:20px 28px 0; display:flex; flex-direction:column; gap:18px;">
+  <div class="page-body" style="padding:20px 28px 0; display:flex; flex-direction:column; gap:12px;">
 
     <!-- ══════ 1. 函館 ══════ -->
     <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
@@ -2454,17 +2297,14 @@
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">700円／天</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <!-- 左：文字資訊 -->
-        <div style="padding:18px 22px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.8;">
-            <li style="margin-bottom:10px;">🅿️ &nbsp;<strong>車位數：</strong>平面 43 格</li>
-            <li style="margin-bottom:10px;">📐 &nbsp;<strong>車輛限制：</strong>長 5.0m／寬 1.83m</li>
-            <li style="margin-bottom:10px;">🕐 &nbsp;<strong>開放時間：</strong>24 小時</li>
-            <li style="margin-bottom:10px;color:var(--accent);font-weight:600;">⚠️ 先到先停，外出恕不保留車位。</li>
-            <li style="color:var(--accent);font-weight:600;">⚠️ 若返回時已滿，需自行尋找附近停車場。</li>
+        <div style="padding:14px 18px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
+            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>平面 43 格</li>
+            <li style="margin-bottom:6px;">📐 &nbsp;<strong>車輛限制：</strong>長 5.0m／寬 1.83m</li>
+            <li style="margin-bottom:6px;">🕐 &nbsp;<strong>開放時間：</strong>24 小時</li>
+            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 先到先停，外出恕不保留。滿位需自行尋找附近車位。</li>
           </ul>
         </div>
-        <!-- 右：2張圖，自然高度，gap 間距 -->
         <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
           <img src="images/hakodate_maps.jpg" alt="函館停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
           <img src="images/hakodate_view.jpg" alt="函館停車場實景" style="width:100%;height:auto;object-fit:contain;display:block;">
@@ -2483,14 +2323,12 @@
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">1,200円／天</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:18px 22px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.8;">
-            <li style="margin-bottom:10px;">🅿️ &nbsp;<strong>車位數：</strong>立體平面 46 格</li>
-            <li style="margin-bottom:10px;">📐 &nbsp;<strong>車輛限制：</strong>寬 1.9m／<strong style="color:var(--accent);">高 2.05m</strong></li>
-            <li style="margin-bottom:4px;">🕐 &nbsp;<strong>開放時間：</strong>15:00 ～ 隔日 11:00</li>
-            <li style="margin-bottom:10px;font-size:15px;color:var(--ink-mid);padding-left:26px;">超過 11 點每小時加收 600円</li>
-            <li style="margin-bottom:10px;color:var(--accent);font-weight:600;">⚠️ 抵達時請由櫃檯人員引導入場。</li>
-            <li style="color:var(--accent);font-weight:600;">⚠️ 先到先停，無合作停車場。滿位需自行尋找。</li>
+        <div style="padding:14px 18px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
+            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>立體平面 46 格</li>
+            <li style="margin-bottom:6px;">📐 &nbsp;<strong>車輛限制：</strong>寬 1.9m／<strong style="color:var(--accent);">高 2.05m</strong></li>
+            <li style="margin-bottom:6px;">🕐 &nbsp;<strong>開放時間：</strong>15:00 ～ 隔日 11:00</li>
+            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 抵達時請由櫃檯人員引導入場。先到先停，無合作停車場。</li>
           </ul>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
@@ -2506,53 +2344,47 @@
         <span style="font-size:18px;">🏨</span>
         <div>
           <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">旭川 Asahikawa</div>
-          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">旭川 Court Hotel &nbsp;<span style="font-size:12px;font-weight:400;">含周邊付費停車場備案</span></div>
+          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">旭川 Court Hotel</div>
         </div>
       </div>
-      <!-- 警告橫幅 -->
-      <div style="background:#fff0f0;border-bottom:2px solid var(--accent);padding:8px 18px;display:flex;align-items:center;gap:10px;">
+      <div style="background:#fff0f0;border-bottom:2px solid var(--accent);padding:6px 14px;display:flex;align-items:center;gap:10px;">
         <span style="font-size:16px;">⚠️</span>
-        <div style="font-size:17px;font-weight:700;color:var(--accent);font-family:'Helvetica Neue',sans-serif;">
-          飯店本館為<strong>機械式停車場，嚴格限高 1.55m！</strong>超高車輛請停放以下周邊停車場。
+        <div style="font-size:15px;font-weight:700;color:var(--accent);font-family:'Helvetica Neue',sans-serif;">
+          飯店本館為<strong>機械式停車場，嚴格限高 1.55m！</strong>超高車輛請停放周邊。
         </div>
       </div>
-      <!-- 俯視大圖：完整顯示 -->
-      <div style="padding:8px;background:#f5f5f5;border-bottom:1px solid #eee;">
+      <div style="padding:6px;background:#f5f5f5;border-bottom:1px solid #eee;">
         <img src="images/asahikawa_maps.jpg" alt="旭川停車場俯視圖" style="width:100%;height:auto;object-fit:contain;display:block;">
       </div>
-      <!-- 3張實景小圖：均分欄寬，自然高度 -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
-        <!-- A -->
         <div style="border-right:1px solid #eee;">
           <div style="padding:6px;background:#f5f5f5;">
             <img src="images/asahikawa_view1.jpg" alt="停車場A" style="width:100%;height:auto;object-fit:contain;display:block;">
           </div>
-          <div style="padding:12px 14px;font-size:17px;line-height:1.8;">
-            <div style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">付費停車場 A</div>
-            <div style="margin-bottom:4px;">24h 上限 <strong>1,100円</strong></div>
-            <div style="color:var(--accent);font-weight:600;">⚠️ 有車底擋板！<br>離開時先繳費，等擋板降下再開車。</div>
+          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+            <div style="font-weight:700;color:#1a1a2e;">付費停車場 A</div>
+            <div>24h 上限 <strong>1,100円</strong></div>
+            <div style="color:var(--accent);font-weight:600;font-size:12px;">⚠️ 有車底擋板！離開先繳費</div>
           </div>
         </div>
-        <!-- B -->
         <div style="border-right:1px solid #eee;">
           <div style="padding:6px;background:#f5f5f5;">
             <img src="images/asahikawa_view2.jpg" alt="停車場B" style="width:100%;height:auto;object-fit:contain;display:block;">
           </div>
-          <div style="padding:12px 14px;font-size:17px;line-height:1.8;">
-            <div style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">付費停車場 B</div>
-            <div style="margin-bottom:4px;">12h 上限 <strong>500円</strong></div>
-            <div style="color:var(--ink-mid);">此場無車底擋板。<br>離開前至機器按號碼繳費即可。</div>
+          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+            <div style="font-weight:700;color:#1a1a2e;">付費停車場 B</div>
+            <div>12h 上限 <strong>500円</strong></div>
+            <div style="color:var(--ink-mid);font-size:12px;">無擋板，至機器按號碼繳費</div>
           </div>
         </div>
-        <!-- C -->
         <div>
           <div style="padding:6px;background:#f5f5f5;">
             <img src="images/asahikawa_view3.jpg" alt="停車場C" style="width:100%;height:auto;object-fit:contain;display:block;">
           </div>
-          <div style="padding:12px 14px;font-size:17px;line-height:1.8;">
-            <div style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">付費停車場 C</div>
-            <div style="margin-bottom:4px;">24h 上限 <strong>1,100円</strong></div>
-            <div style="color:var(--accent);font-weight:600;">⚠️ 有車底擋板！<br>離開時先繳費，等擋板降下再開車。</div>
+          <div style="padding:8px 10px;font-size:14px;line-height:1.6;">
+            <div style="font-weight:700;color:#1a1a2e;">付費停車場 C</div>
+            <div>24h 上限 <strong>1,100円</strong></div>
+            <div style="color:var(--accent);font-weight:600;font-size:12px;">⚠️ 有車底擋板！離開先繳費</div>
           </div>
         </div>
       </div>
@@ -2568,34 +2400,27 @@
         </div>
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">2,000円／天</div>
       </div>
-      <!-- 上：文字 + 俯視圖 -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:18px 22px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.8;">
-            <li style="margin-bottom:10px;">🅿️ &nbsp;<strong>車位數：</strong>立體機械 14格；平面 7格</li>
-            <li style="margin-bottom:4px;"><strong style="color:var(--accent);">⚠️ 限高 1.55m／寬 1.85m</strong></li>
-            <li style="margin-bottom:10px;font-size:15px;color:var(--ink-mid);padding-left:22px;">平面車位優先保留給超高車輛</li>
-            <li style="margin-bottom:10px;">🕐 &nbsp;<strong>開放時間：</strong>15:00 ～ 隔日 11:00</li>
-            <li style="margin-bottom:10px;color:var(--accent);font-weight:600;">⚠️ 無法事前預約保留。</li>
-            <li style="margin-bottom:10px;color:var(--accent);font-weight:600;">⚠️ 此區單行道極多，請嚴格依照地圖箭頭行駛！</li>
-            <li style="color:var(--accent);font-weight:600;">⚠️ 滿位將引導至附近投幣停車場（無合作優惠）。</li>
+        <div style="padding:14px 18px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:17px;line-height:1.7;">
+            <li style="margin-bottom:6px;">🅿️ &nbsp;<strong>車位數：</strong>機械 14格；平面 7格</li>
+            <li style="margin-bottom:6px;"><strong style="color:var(--accent);">⚠️ 限高 1.55m／寬 1.85m</strong></li>
+            <li style="color:var(--accent);font-weight:600;font-size:15px;">⚠️ 無法預約。此區單行道多，請依地圖箭頭行駛！滿位引導至投幣停車場（無優惠）。</li>
           </ul>
         </div>
-        <div style="padding:8px;background:#f5f5f5;">
+        <div style="padding:6px;background:#f5f5f5;">
           <img src="images/sapporo_maps.jpg" alt="札幌停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
         </div>
       </div>
-      <!-- 下：2張實景圖 -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px;background:#f5f5f5;border-top:1px solid #eee;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;background:#f5f5f5;border-top:1px solid #eee;">
         <img src="images/sapporo_view1.jpg" alt="札幌停車場實景1" style="width:100%;height:auto;object-fit:contain;display:block;">
         <img src="images/sapporo_view2.jpg" alt="札幌停車場實景2" style="width:100%;height:auto;object-fit:contain;display:block;">
       </div>
     </div>
 
-  </div><!-- /page-body -->
+  </div>
 
-  <div class="page-footer" style="margin-top:14px;"></div>
-
+  <div class="page-footer" style="margin-top:10px;"></div>
 </div><!-- /parking-page -->
 
 
@@ -2616,33 +2441,33 @@
     </div>
   </div>
 
-  <div class="page-body" style="padding:20px 28px 0;display:flex;flex-direction:column;gap:22px;">
+  <div class="page-body" style="padding:20px 28px 0;display:flex;flex-direction:column;gap:18px;">
 
     <!-- ══════ 餐廳 1：小樽 といまぐろ ══════ -->
     <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
-      <div style="background:#1a1a2e;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:22px;">🥩</span>
+      <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">🥩</span>
         <div>
           <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">小樽 Otaru &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 5/15（五）</div>
-          <div style="font-size:17px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">和牛海鮮天然本鮪専門店 といまぐろ</div>
+          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">和牛海鮮天然本鮪専門店 といまぐろ</div>
         </div>
         <div style="margin-left:auto;background:#2c7a4b;border-radius:5px;padding:4px 14px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;white-space:nowrap;">✅ 預約確認</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:22px 26px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:20px;line-height:1.8;">
-            <li style="margin-bottom:16px;">
+        <div style="padding:20px 22px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.6;">
+            <li style="margin-bottom:12px;">
               📅 &nbsp;<strong>日期時間</strong><br>
-              <span style="font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;padding-left:28px;">5/15（五）12:00</span>
+              <span style="font-size:24px;font-weight:800;color:var(--accent);padding-left:28px;">5/15（五）12:00</span>
             </li>
-            <li style="margin-bottom:16px;">
+            <li style="margin-bottom:12px;">
               👥 &nbsp;<strong>預約人數</strong><br>
-              <span style="font-size:28px;font-weight:800;color:#1a1a2e;padding-left:28px;">11 名</span>
+              <span style="font-size:24px;font-weight:800;color:#1a1a2e;padding-left:28px;">11 名</span>
             </li>
             <li>
               👤 &nbsp;<strong>預約代表</strong><br>
-              <span style="font-size:22px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
-              <span style="font-size:16px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
+              <span style="font-size:20px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
+              <span style="font-size:14px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
             </li>
           </ul>
         </div>
@@ -2654,33 +2479,33 @@
 
     <!-- ══════ 餐廳 2：札幌 The Sakura Buffet ══════ -->
     <div style="border:2px solid #1a1a2e;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;">
-      <div style="background:#1a1a2e;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:22px;">🌸</span>
+      <div style="background:#1a1a2e;color:#fff;padding:8px 18px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">🌸</span>
         <div>
           <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:rgba(255,255,255,0.6);">札幌 Sapporo &nbsp;·&nbsp; Day 10 &nbsp;·&nbsp; 5/18（一）</div>
-          <div style="font-size:17px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">The Sakura Buffet</div>
+          <div style="font-size:16px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">The Sakura Buffet</div>
         </div>
         <div style="margin-left:auto;background:#2c7a4b;border-radius:5px;padding:4px 14px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;white-space:nowrap;">✅ 預約確認</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
-        <div style="padding:22px 26px;border-right:1px solid #eee;">
-          <ul style="list-style:none;padding:0;margin:0;font-size:20px;line-height:1.8;">
-            <li style="margin-bottom:16px;">
+        <div style="padding:20px 22px;border-right:1px solid #eee;">
+          <ul style="list-style:none;padding:0;margin:0;font-size:19px;line-height:1.6;">
+            <li style="margin-bottom:12px;">
               📅 &nbsp;<strong>日期時間</strong><br>
-              <span style="font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;padding-left:28px;">5/18（一）18:30</span>
+              <span style="font-size:24px;font-weight:800;color:var(--accent);padding-left:28px;">5/18（一）18:30</span>
             </li>
-            <li style="margin-bottom:16px;">
+            <li style="margin-bottom:12px;">
               👥 &nbsp;<strong>預約人數</strong><br>
-              <span style="font-size:28px;font-weight:800;color:#1a1a2e;padding-left:28px;">7 名</span>
+              <span style="font-size:24px;font-weight:800;color:#1a1a2e;padding-left:28px;">7 名</span>
             </li>
-            <li style="margin-bottom:16px;">
+            <li style="margin-bottom:12px;">
               👤 &nbsp;<strong>預約代表</strong><br>
-              <span style="font-size:22px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
-              <span style="font-size:16px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
+              <span style="font-size:20px;font-weight:700;color:#1a1a2e;padding-left:28px;">徐禮模</span>
+              <span style="font-size:14px;color:var(--ink-soft);padding-left:6px;">Shu Li-Mo</span>
             </li>
             <li>
               🍽️ &nbsp;<strong>預約方案</strong><br>
-              <span style="font-size:19px;font-weight:700;color:#2c7a4b;padding-left:28px;">100 分鐘吃到飽（含飲料）</span>
+              <span style="font-size:17px;font-weight:700;color:#2c7a4b;padding-left:28px;">100 分鐘吃到飽（含飲料）</span>
             </li>
           </ul>
         </div>
@@ -2690,9 +2515,9 @@
       </div>
     </div>
 
-  </div><!-- /page-body -->
+  </div>
 
-  <div class="page-footer" style="margin-top:14px;"></div>
+  <div class="page-footer" style="margin-top:10px;"></div>
 
 </div><!-- /reservation-page -->
 
