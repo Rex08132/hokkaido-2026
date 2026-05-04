@@ -476,7 +476,8 @@
     </div>
 
     <div class="timeline">
-      <div class="tl-item spread-more">
+      <!-- 將原本撐太開的 spread-more 移除，讓更多行程能自然塞入第一頁 -->
+      <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -485,7 +486,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">08:00<br>↓<br>09:45</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -494,7 +495,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-more">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">70 分鐘</div></div>
@@ -503,7 +504,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">11:00<br>↓<br>11:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -512,7 +513,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-more">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
@@ -521,11 +522,8 @@
         </div>
       </div>
       
-      <!-- Day 2 強制換頁點 & 透明墊片 -->
-      <div class="force-page-break"></div>
-      <div class="spacer-35mm"></div>
-
-      <div class="tl-item spread-more">
+      <!-- 以下兩個行程被拉回第一頁 -->
+      <div class="tl-item">
         <div class="tl-time">11:35<br>↓<br>12:35</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -560,6 +558,10 @@
           <div class="drive-stat"><div class="drive-stat-label">方向</div><div class="drive-stat-value" style="font-size:13px;padding-top:3px;">SAIRO → 月浦展望台</div></div>
         </div>
       </div>
+
+      <!-- Day 2 強制換頁點 & 透明墊片 -->
+      <div class="force-page-break"></div>
+      <div style="height: 15mm; display: block !important; border-top: 1px solid transparent !important;"></div>
 
       <div class="tl-item">
         <div class="tl-time">13:25<br>↓<br>13:55</div>
@@ -614,7 +616,8 @@
     </div>
   </div>
 
-  <div class="page-footer" style="margin-top: 15mm;">
+  <!-- 第二頁中下方：移除過度下推的 push-down，改用適中的 margin-top -->
+  <div class="page-footer" style="margin-top: 20mm !important;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>洞爺觀光酒店</strong></span>
@@ -633,7 +636,6 @@
     </div>
   </div>
 </div><!-- /page day2 -->
-
 
 <!-- ======================== DAY 3 (Single) ======================== -->
 <div class="page single-page">
