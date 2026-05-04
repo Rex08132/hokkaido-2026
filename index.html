@@ -2181,7 +2181,7 @@
         <div class="day-title">札幌 ➡ 新千歲機場 ✈ 高雄</div>
         <div class="day-date">2026年 5月 19日（二）</div>
       </div>
-      <div class="mileage-box">
+      <div class="mileage-box" style="background:#444;">
         <div class="mileage-label">今日里程</div>
         <div class="mileage-value">40<span style="font-size:13px;font-weight:400"> km</span></div>
       </div>
@@ -2453,7 +2453,7 @@
         </div>
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">700円／天</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
         <!-- 左：文字資訊 -->
         <div style="padding:14px 18px;border-right:1px solid #eee;">
           <ul style="list-style:none;padding:0;margin:0;font-size:13px;line-height:2;">
@@ -2464,10 +2464,10 @@
             <li style="color:var(--accent);font-weight:600;">⚠️ 若返回時已滿，需自行尋找附近停車場。</li>
           </ul>
         </div>
-        <!-- 右：2張圖 -->
-        <div style="display:grid;grid-template-rows:1fr 1fr;gap:2px;background:#eee;">
-          <img src="images/hakodate_maps.jpg" alt="函館停車場地圖" style="width:100%;height:100%;object-fit:cover;aspect-ratio:16/5;display:block;">
-          <img src="images/hakodate_view.jpg" alt="函館停車場實景" style="width:100%;height:100%;object-fit:cover;aspect-ratio:16/5;display:block;">
+        <!-- 右：2張圖，自然高度，gap 間距 -->
+        <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
+          <img src="images/hakodate_maps.jpg" alt="函館停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
+          <img src="images/hakodate_view.jpg" alt="函館停車場實景" style="width:100%;height:auto;object-fit:contain;display:block;">
         </div>
       </div>
     </div>
@@ -2482,7 +2482,7 @@
         </div>
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">1,200円／天</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
         <div style="padding:14px 18px;border-right:1px solid #eee;">
           <ul style="list-style:none;padding:0;margin:0;font-size:13px;line-height:2;">
             <li>🅿️ &nbsp;<strong>車位數：</strong>立體平面停車場 46 格</li>
@@ -2493,9 +2493,9 @@
             <li style="color:var(--accent);font-weight:600;">⚠️ 先到先停，無合作停車場。滿位需自行尋找。</li>
           </ul>
         </div>
-        <div style="display:grid;grid-template-rows:1fr 1fr;gap:2px;background:#eee;">
-          <img src="images/otaru_maps.jpg" alt="小樽停車場地圖" style="width:100%;height:100%;object-fit:cover;aspect-ratio:16/5;display:block;">
-          <img src="images/otaru_view.jpg" alt="小樽停車場實景" style="width:100%;height:100%;object-fit:cover;aspect-ratio:16/5;display:block;">
+        <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:#f5f5f5;">
+          <img src="images/otaru_maps.jpg" alt="小樽停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
+          <img src="images/otaru_view.jpg" alt="小樽停車場實景" style="width:100%;height:auto;object-fit:contain;display:block;">
         </div>
       </div>
     </div>
@@ -2516,15 +2516,17 @@
           飯店本館為<strong>機械式停車場，嚴格限高 1.55m！</strong>超高車輛請停放以下周邊停車場。
         </div>
       </div>
-      <!-- 俯視大圖 -->
-      <div style="background:#eee;">
-        <img src="images/asahikawa_maps.jpg" alt="旭川停車場俯視圖" style="width:100%;height:120px;object-fit:cover;display:block;">
+      <!-- 俯視大圖：完整顯示 -->
+      <div style="padding:8px;background:#f5f5f5;border-bottom:1px solid #eee;">
+        <img src="images/asahikawa_maps.jpg" alt="旭川停車場俯視圖" style="width:100%;height:auto;object-fit:contain;display:block;">
       </div>
-      <!-- 3張實景小圖 + 說明 -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid #eee;">
+      <!-- 3張實景小圖：均分欄寬，自然高度 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
         <!-- A -->
         <div style="border-right:1px solid #eee;">
-          <img src="images/asahikawa_view1.jpg" alt="停車場A" style="width:100%;height:80px;object-fit:cover;display:block;">
+          <div style="padding:6px;background:#f5f5f5;">
+            <img src="images/asahikawa_view1.jpg" alt="停車場A" style="width:100%;height:auto;object-fit:contain;display:block;">
+          </div>
           <div style="padding:8px 12px;font-size:12px;line-height:1.7;">
             <div style="font-weight:700;color:#1a1a2e;margin-bottom:3px;">付費停車場 A</div>
             <div>24h 上限 <strong>1,100円</strong></div>
@@ -2533,7 +2535,9 @@
         </div>
         <!-- B -->
         <div style="border-right:1px solid #eee;">
-          <img src="images/asahikawa_view2.jpg" alt="停車場B" style="width:100%;height:80px;object-fit:cover;display:block;">
+          <div style="padding:6px;background:#f5f5f5;">
+            <img src="images/asahikawa_view2.jpg" alt="停車場B" style="width:100%;height:auto;object-fit:contain;display:block;">
+          </div>
           <div style="padding:8px 12px;font-size:12px;line-height:1.7;">
             <div style="font-weight:700;color:#1a1a2e;margin-bottom:3px;">付費停車場 B</div>
             <div>12h 上限 <strong>500円</strong></div>
@@ -2542,7 +2546,9 @@
         </div>
         <!-- C -->
         <div>
-          <img src="images/asahikawa_view3.jpg" alt="停車場C" style="width:100%;height:80px;object-fit:cover;display:block;">
+          <div style="padding:6px;background:#f5f5f5;">
+            <img src="images/asahikawa_view3.jpg" alt="停車場C" style="width:100%;height:auto;object-fit:contain;display:block;">
+          </div>
           <div style="padding:8px 12px;font-size:12px;line-height:1.7;">
             <div style="font-weight:700;color:#1a1a2e;margin-bottom:3px;">付費停車場 C</div>
             <div>24h 上限 <strong>1,100円</strong></div>
@@ -2563,7 +2569,7 @@
         <div style="margin-left:auto;background:var(--accent);border-radius:5px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Helvetica Neue',sans-serif;">2,000円／天</div>
       </div>
       <!-- 上：文字 + 俯視圖 -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:start;">
         <div style="padding:14px 18px;border-right:1px solid #eee;">
           <ul style="list-style:none;padding:0;margin:0;font-size:13px;line-height:2;">
             <li>🅿️ &nbsp;<strong>車位數：</strong>立體機械 14格；平面 7格</li>
@@ -2575,14 +2581,14 @@
             <li style="color:var(--accent);font-weight:600;">⚠️ 滿位將引導至附近投幣停車場（無合作優惠）。</li>
           </ul>
         </div>
-        <div style="background:#eee;">
-          <img src="images/sapporo_maps.jpg" alt="札幌停車場地圖" style="width:100%;height:100%;object-fit:cover;min-height:120px;display:block;">
+        <div style="padding:8px;background:#f5f5f5;">
+          <img src="images/sapporo_maps.jpg" alt="札幌停車場地圖" style="width:100%;height:auto;object-fit:contain;display:block;">
         </div>
       </div>
       <!-- 下：2張實景圖 -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#eee;border-top:2px solid #eee;">
-        <img src="images/sapporo_view1.jpg" alt="札幌停車場實景1" style="width:100%;height:90px;object-fit:cover;display:block;">
-        <img src="images/sapporo_view2.jpg" alt="札幌停車場實景2" style="width:100%;height:90px;object-fit:cover;display:block;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px;background:#f5f5f5;border-top:1px solid #eee;">
+        <img src="images/sapporo_view1.jpg" alt="札幌停車場實景1" style="width:100%;height:auto;object-fit:contain;display:block;">
+        <img src="images/sapporo_view2.jpg" alt="札幌停車場實景2" style="width:100%;height:auto;object-fit:contain;display:block;">
       </div>
     </div>
 
