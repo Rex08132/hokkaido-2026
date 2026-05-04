@@ -83,7 +83,6 @@
 
   .tl-item { display: flex; gap: 0; margin-bottom: 14px; position: relative; page-break-inside: avoid; break-inside: avoid; }
   .tl-item.spread-more { margin-bottom: 26px !important; }
-  .tl-item.spread-medium { margin-bottom: 18px !important; }
 
   /* ── 時間欄 ── */
   .tl-time { width: 84px; flex-shrink: 0; padding-top: 2px; padding-right: 10px; text-align: right; font-size: 15px; font-family: "Helvetica Neue", "Arial", sans-serif; font-weight: 800; color: var(--accent); line-height: 1.25; letter-spacing: -0.01em; }
@@ -103,7 +102,6 @@
   /* ===== 自駕路段框 ===== */
   .drive-card { display: flex; align-items: center; gap: 14px; background: var(--drive-bg); border: 2px solid var(--drive-border); border-radius: 8px; padding: 10px 16px; margin: 0 0 18px 84px; position: relative; }
   .drive-card.spread-more { margin-bottom: 26px !important; }
-  .drive-card.spread-medium { margin-bottom: 18px !important; }
 
   .drive-icon { font-size: 22px; flex-shrink: 0; }
   .drive-details { display: flex; gap: 18px; flex-wrap: wrap; }
@@ -113,7 +111,6 @@
 
   /* ===== 頁尾 ===== */
   .page-footer { margin-top: 18px; border-top: 2px solid var(--header-bg); padding: 16px 28px 0; }
-  .mt-auto { margin-top: auto !important; } 
 
   .footer-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .meal-item { background: #f8f8f8; border-left: 3px solid var(--header-bg); padding: 8px 12px; border-radius: 0 5px 5px 0; }
@@ -136,10 +133,10 @@
   .mile-chip strong { color: var(--accent); font-weight: 700; }
 
   /* 螢幕隱藏專區 */
-  .force-page-break, .spacer-35mm { display: none; }
+  .force-page-break, .spacer-20mm { display: none; }
 
   /* ==============================================================
-     極致列印排版控制 (核心修復：拔除 Flexbox 與鎖死高度)
+     極致列印排版控制 (終極穩定版：完全解除高度封印，自然流動)
      ============================================================== */
   @media print {
     *, *::before, *::after {
@@ -159,7 +156,7 @@
       margin: 10mm 15mm; 
     }
 
-    /* 關鍵修復：把 page 變成純 block，允許自然長高與跨頁 */
+    /* 關鍵修復：把 page 變成純 block，允許自然長高與跨頁，杜絕重疊問題 */
     .page {
       display: block !important; 
       width: 100% !important;
@@ -169,69 +166,70 @@
       padding: 0 !important;
       page-break-after: always !important;
       break-after: page !important;
-      page-break-inside: auto !important; /* 允許內部自然跨頁 */
+      page-break-inside: auto !important; 
       box-sizing: border-box;
     }
     
     .page:first-child { page-break-before: avoid !important; break-before: avoid !important; }
+    .single-page, .multi-page { height: auto !important; overflow: visible !important; }
 
-    /* 解除所有高度封印 */
-    .single-page { height: auto !important; overflow: visible !important; }
-    .multi-page { height: auto !important; min-height: unset !important; }
-
-    /* 手動換頁標籤與透明墊片啟動 */
+    /* 換頁標籤與第二頁頂部適中墊片 */
     .force-page-break {
         display: block !important;
-        page-break-before: always !important; /* 用 before 斷頁比 after 更精確 */
-        break-before: page !important;
-        height: 1px;
+        page-break-after: always !important;
+        break-after: page !important;
+        height: 0;
         margin: 0;
         padding: 0;
         border: none;
     }
-    .spacer-35mm {
+    .spacer-20mm {
         display: block !important;
-        height: 35mm !important; 
-        border-top: 1px solid transparent !important; /* 防止列印時邊距折疊失效 */
+        height: 20mm !important; 
+        border-top: 1px solid transparent !important; 
     }
 
-    /* 關鍵修復：拔除會導致溢出的 Flex 排版 */
-    .page-header { padding: 18px 20px 14px !important; page-break-inside: avoid !important; }
-    .page-body { display: block !important; padding: 14px 20px 0 !important; }
+    /* 拔除會導致溢出的 Flex 排版，改為純 block */
+    .page-header { padding: 16px 20px 12px !important; page-break-inside: avoid !important; }
+    .page-body { display: block !important; padding: 12px 20px 0 !important; }
     .timeline { display: block !important; }
     
-    .page-footer { padding: 10px 20px 0 !important; margin-top: 14px !important; page-break-inside: avoid !important; }
-    .mt-auto { margin-top: 15mm !important; } /* 安全下推，取代原本危險的 Flex mt-auto */
+    /* 頁尾安全流動設定，自然落在內容下方 */
+    .page-footer { padding: 10px 20px 0 !important; margin-top: 15mm !important; page-break-inside: avoid !important; }
 
-    /* ─ 專屬行程分散 CSS (稍微收緊，避免 Day 3, 6 溢出) ─ */
+    /* ─ 壓縮間距，保證 Day 3, 6, 10 等滿檔行程能完美塞入單頁 ─ */
     .tl-item { margin-bottom: 10px !important; page-break-inside: avoid !important; }
-    .drive-card { padding: 8px 14px !important; margin: 0 0 10px 84px !important; gap: 12px !important; page-break-inside: avoid !important; }
+    .drive-card { padding: 8px 14px !important; margin: 0 0 10px 84px !important; gap: 10px !important; page-break-inside: avoid !important; }
     
-    .tl-item.spread-more, .drive-card.spread-more { margin-bottom: 24px !important; }
-    .tl-item.spread-medium, .drive-card.spread-medium { margin-bottom: 16px !important; } /* 安全間距 */
+    .tl-item.spread-more, .drive-card.spread-more { margin-bottom: 20px !important; }
 
-    /* ─ 內部細節微調 ─ */
-    .day-title { font-size: 24px !important; margin-top: 4px !important; }
-    .route-bar { margin-top: 10px !important; padding-top: 10px !important; font-size: 14px !important; }
-    .mileage-summary { margin-bottom: 12px !important; }
+    /* ─ 縮小字體與區塊高度，爭取最大安全空間 ─ */
+    .day-title { font-size: 22px !important; margin-top: 2px !important; }
+    .route-bar { margin-top: 8px !important; padding-top: 8px !important; font-size: 13.5px !important; }
+    .mileage-summary { margin-bottom: 10px !important; }
     .tl-content { padding-bottom: 0 !important; }
-    .spot-name { font-size: 16px !important; margin-bottom: 4px !important; }
-    .spot-desc { font-size: 13.5px !important; margin-bottom: 4px !important; line-height: 1.5 !important; }
-    .drive-icon { font-size: 20px !important; }
-    .drive-stat-value { font-size: 15px !important; }
-    .hotel-summary { padding: 8px 14px !important; margin-bottom: 10px !important; font-size: 14px !important; }
-    .footer-summary { gap: 8px !important; margin-bottom: 8px !important; }
-    .meal-item { padding: 8px 12px !important; }
-    .meal-value { font-size: 13px !important; margin-top: 2px !important; }
-    .notes-section { padding: 6px 0 8px !important; }
-    .notes-title { margin-bottom: 4px !important; }
-    .notes-line { height: 22px !important; } 
+    .spot-name { font-size: 15.5px !important; margin-bottom: 3px !important; }
+    .spot-desc { font-size: 13px !important; margin-bottom: 3px !important; line-height: 1.45 !important; }
+    .drive-icon { font-size: 18px !important; }
+    .drive-stat-value { font-size: 14.5px !important; }
+    .hotel-summary { padding: 6px 12px !important; margin-bottom: 8px !important; font-size: 13.5px !important; }
+    .footer-summary { gap: 6px !important; margin-bottom: 6px !important; }
+    .meal-item { padding: 6px 10px !important; }
+    .meal-value { font-size: 12.5px !important; margin-top: 2px !important; }
+    .notes-section { padding: 4px 0 6px !important; }
+    .notes-title { margin-bottom: 2px !important; }
+    .notes-line { height: 18px !important; } 
 
     table, tr, .checklist-warning { page-break-inside: avoid !important; break-inside: avoid !important; }
     table { border-collapse: collapse; }
     
-    /* 附錄卡片保護 */
     .hotel-parking-card, .reservation-card { page-break-inside: avoid !important; }
+  }
+
+  @media screen and (max-width: 750px) {
+    .page { width: 100%; margin: 0; box-shadow: none; }
+    .footer-summary { grid-template-columns: 1fr; }
+    .drive-card { margin-left: 0; }
   }
 </style>
 </head>
@@ -330,7 +328,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 30mm;">
+  <div class="page-footer">
     <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:14px 18px;" class="checklist-warning">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#3a6fd8;margin-bottom:8px;">⚠️ 行李與報到提醒</div>
       <div style="font-size:13.5px;color:var(--ink-mid);font-family:'Helvetica Neue',sans-serif;line-height:2;">
@@ -429,7 +427,7 @@
     </div>
   </div>
 
-  <div class="page-footer" style="margin-top: 25mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>登別 石水亭</strong></span>
@@ -476,7 +474,7 @@
     </div>
 
     <div class="timeline">
-      <!-- 將原本撐太開的 spread-more 移除，讓更多行程能自然塞入第一頁 -->
+      <!-- 移除部分 spread-more，讓第一頁能容納更多行程 -->
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -522,7 +520,6 @@
         </div>
       </div>
       
-      <!-- 以下兩個行程被拉回第一頁 -->
       <div class="tl-item">
         <div class="tl-time">11:35<br>↓<br>12:35</div>
         <div class="tl-dot"></div>
@@ -561,7 +558,7 @@
 
       <!-- Day 2 強制換頁點 & 透明墊片 -->
       <div class="force-page-break"></div>
-      <div style="height: 15mm; display: block !important; border-top: 1px solid transparent !important;"></div>
+      <div class="spacer-20mm"></div>
 
       <div class="tl-item">
         <div class="tl-time">13:25<br>↓<br>13:55</div>
@@ -616,8 +613,7 @@
     </div>
   </div>
 
-  <!-- 第二頁中下方：移除過度下推的 push-down，改用適中的 margin-top -->
-  <div class="page-footer" style="margin-top: 20mm !important;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>洞爺觀光酒店</strong></span>
@@ -636,6 +632,7 @@
     </div>
   </div>
 </div><!-- /page day2 -->
+
 
 <!-- ======================== DAY 3 (Single) ======================== -->
 <div class="page single-page">
@@ -663,7 +660,7 @@
       <div class="mile-chip">⛽ 加油提醒 <strong>335 km</strong></div>
     </div>
     <div class="timeline">
-      <!-- 移除了 spread-medium，讓 9 個行程區塊自然緊湊 -->
+      <!-- 完全移除所有 spread 屬性，讓 Day 3 緊密排列，保證塞得下 -->
       <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:00</div>
         <div class="tl-dot"></div>
@@ -749,7 +746,7 @@
       </div>
     </div>
   </div>
-  <div class="page-footer" style="margin-top: 4mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -768,6 +765,7 @@
     </div>
   </div>
 </div><!-- /page day3 -->
+
 
 <!-- ======================== DAY 4 (Multi) ======================== -->
 <div class="page multi-page">
@@ -842,9 +840,9 @@
 
       <!-- Day 4 強制換頁點 & 透明墊片 -->
       <div class="force-page-break"></div>
-      <div class="spacer-35mm"></div>
+      <div class="spacer-20mm"></div>
 
-      <div class="drive-card spread-more">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
@@ -853,7 +851,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">11:25<br>↓<br>12:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -865,7 +863,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">午餐</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -915,7 +913,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 15mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1009,9 +1007,9 @@
 
       <!-- Day 5 強制換頁點 & 透明墊片 -->
       <div class="force-page-break"></div>
-      <div class="spacer-35mm"></div>
+      <div class="spacer-20mm"></div>
 
-      <div class="drive-card spread-more">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">55 分鐘</div></div>
@@ -1020,7 +1018,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">10:35<br>↓<br>11:20</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1094,7 +1092,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 15mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1141,7 +1139,8 @@
       <div class="mile-chip">⛽ 加油提醒 <strong>395 km</strong></div>
     </div>
     <div class="timeline">
-      <div class="tl-item spread-medium">
+      <!-- 移除 spread 屬性，確保完美貼合一頁 -->
+      <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1150,7 +1149,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">81 分鐘</div></div>
@@ -1159,7 +1158,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">10:05<br>↓<br>10:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1168,7 +1167,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">105 分鐘</div></div>
@@ -1177,7 +1176,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">12:20<br>↓<br>13:40</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1186,7 +1185,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">70 分鐘</div></div>
@@ -1195,7 +1194,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">14:50<br>↓</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1218,7 +1217,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 10mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Nord 小樽飯店</strong></span>
@@ -1522,7 +1521,6 @@
       <div class="mile-chip">⛽ 加油提醒 <strong>376 km</strong></div>
     </div>
 
-    <!-- 需求10: 讓第一頁行程分散一點 -->
     <div class="timeline">
       <div class="tl-item spread-more">
         <div class="tl-time">07:00<br>↓<br>09:00</div>
@@ -1565,9 +1563,9 @@
 
       <!-- Day 9 強制換頁點 & 透明墊片 -->
       <div class="force-page-break"></div>
-      <div class="spacer-35mm"></div>
+      <div class="spacer-20mm"></div>
 
-      <div class="tl-item spread-more">
+      <div class="tl-item">
         <div class="tl-time">10:50<br>↓<br>12:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1653,7 +1651,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 15mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -1693,7 +1691,6 @@
     </div>
   </div>
   
-  <!-- 需求11: 稍微分開一點點，頁尾往下移 -->
   <div class="page-body">
     <div class="mileage-summary" style="margin-bottom: 20px;">
       <div class="mile-chip">今日行駛 <strong>77 km</strong></div>
@@ -1701,7 +1698,8 @@
       <div class="mile-chip">⛽ 加油提醒 <strong>453 km</strong></div>
     </div>
     <div class="timeline">
-      <div class="tl-item spread-medium">
+      <!-- 移除所有 spread 屬性，確保 Day 10 緊密排列 -->
+      <div class="tl-item">
         <div class="tl-time">07:00<br>↓<br>08:30</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1710,7 +1708,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">39 分鐘</div></div>
@@ -1719,7 +1717,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">09:10<br>↓<br>11:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1728,7 +1726,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">48 分鐘</div></div>
@@ -1737,7 +1735,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">12:00<br>↓<br>15:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1746,7 +1744,7 @@
         </div>
       </div>
 
-      <div class="drive-card spread-medium">
+      <div class="drive-card">
         <div class="drive-icon">🚗</div>
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">40 分鐘</div></div>
@@ -1755,7 +1753,7 @@
         </div>
       </div>
 
-      <div class="tl-item spread-medium">
+      <div class="tl-item">
         <div class="tl-time">15:40<br>↓<br>18:00</div>
         <div class="tl-dot"></div>
         <div class="tl-content">
@@ -1775,7 +1773,7 @@
     </div>
   </div>
   
-  <div class="page-footer" style="margin-top: 25mm;">
+  <div class="page-footer">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -1932,7 +1930,6 @@
     </div>
   </div>
 
-  <!-- 需求13: 行前準備物品清單字體加大，利用 Flex 排版平均撐滿 -->
   <div class="page-body" style="padding:24px 32px 20px;">
     <div style="display:flex;flex-direction:column;justify-content:space-between;flex:1;">
 
