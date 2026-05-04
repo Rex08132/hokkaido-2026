@@ -46,13 +46,8 @@
     overflow: hidden;
   }
 
-  /* 區分單頁鎖死與多頁流動 */
-  .single-page {
-    height: 277mm; /* 297mm - 20mm(上下邊界) */
-  }
-  .multi-page {
-    min-height: 277mm;
-  }
+  .single-page { height: 277mm; }
+  .multi-page { min-height: 277mm; }
 
   /* ===== 頁首 ===== */
   .page-header {
@@ -118,7 +113,7 @@
 
   /* ===== 頁尾 ===== */
   .page-footer { margin-top: 18px; border-top: 2px solid var(--header-bg); padding: 16px 28px 0; }
-  .mt-auto { margin-top: auto !important; } /* 單頁推到底部用 */
+  .mt-auto { margin-top: auto !important; } 
 
   .footer-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .meal-item { background: #f8f8f8; border-left: 3px solid var(--header-bg); padding: 8px 12px; border-radius: 0 5px 5px 0; }
@@ -144,7 +139,7 @@
   .force-page-break, .spacer-35mm { display: none; }
 
   /* ==============================================================
-     極致列印排版控制 (強制鎖死 A4, PDF產生器邏輯)
+     極致列印排版控制 (核心修復：拔除 Flexbox 與鎖死高度)
      ============================================================== */
   @media print {
     *, *::before, *::after {
@@ -157,48 +152,63 @@
       background: #ffffff !important;
       margin: 0 !important;
       padding: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
     }
 
     @page {
       size: A4 portrait;
-      margin: 10mm 15mm; /* 完美的黃金壓縮比例，避開印表機咬紙盲區 */
+      margin: 10mm 15mm; 
     }
 
+    /* 關鍵修復：把 page 變成純 block，允許自然長高與跨頁 */
     .page {
+      display: block !important; 
       width: 100% !important;
+      height: auto !important;
+      min-height: unset !important;
       margin: 0 !important;
       padding: 0 !important;
       page-break-after: always !important;
       break-after: page !important;
-      page-break-inside: avoid !important;
+      page-break-inside: auto !important; /* 允許內部自然跨頁 */
       box-sizing: border-box;
     }
     
-    .single-page { height: 277mm !important; overflow: hidden; }
-    .multi-page { height: auto !important; min-height: 277mm !important; }
+    .page:first-child { page-break-before: avoid !important; break-before: avoid !important; }
+
+    /* 解除所有高度封印 */
+    .single-page { height: auto !important; overflow: visible !important; }
+    .multi-page { height: auto !important; min-height: unset !important; }
 
     /* 手動換頁標籤與透明墊片啟動 */
     .force-page-break {
         display: block !important;
-        page-break-after: always !important;
-        break-after: page !important;
-        height: 0;
-        border: none;
+        page-break-before: always !important; /* 用 before 斷頁比 after 更精確 */
+        break-before: page !important;
+        height: 1px;
         margin: 0;
         padding: 0;
+        border: none;
     }
     .spacer-35mm {
         display: block !important;
-        height: 35mm !important; /* 將第二頁內容推至中下方 */
+        height: 35mm !important; 
+        border-top: 1px solid transparent !important; /* 防止列印時邊距折疊失效 */
     }
 
-    /* ─ 區塊不被切斷 ─ */
+    /* 關鍵修復：拔除會導致溢出的 Flex 排版 */
     .page-header { padding: 18px 20px 14px !important; page-break-inside: avoid !important; }
-    .page-body { padding: 14px 20px 0 !important; display: flex !important; flex-direction: column !important; }
+    .page-body { display: block !important; padding: 14px 20px 0 !important; }
+    .timeline { display: block !important; }
+    
     .page-footer { padding: 10px 20px 0 !important; margin-top: 14px !important; page-break-inside: avoid !important; }
-    .mt-auto { margin-top: auto !important; } /* 單頁推到底部 */
+    .mt-auto { margin-top: 15mm !important; } /* 安全下推，取代原本危險的 Flex mt-auto */
+
+    /* ─ 專屬行程分散 CSS (稍微收緊，避免 Day 3, 6 溢出) ─ */
+    .tl-item { margin-bottom: 10px !important; page-break-inside: avoid !important; }
+    .drive-card { padding: 8px 14px !important; margin: 0 0 10px 84px !important; gap: 12px !important; page-break-inside: avoid !important; }
+    
+    .tl-item.spread-more, .drive-card.spread-more { margin-bottom: 24px !important; }
+    .tl-item.spread-medium, .drive-card.spread-medium { margin-bottom: 16px !important; } /* 安全間距 */
 
     /* ─ 內部細節微調 ─ */
     .day-title { font-size: 24px !important; margin-top: 4px !important; }
@@ -245,7 +255,6 @@
 
   <div class="page-body" style="padding:24px 32px 0;">
     <!-- ── 去程 ── -->
-    <!-- 加大間距 -->
     <div style="margin-bottom:45px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:var(--ink-soft);margin-bottom:10px;">OUTBOUND FLIGHT &nbsp;／&nbsp; 去程</div>
       <div style="background:#f5f9ff;border:2px solid #3a6fd8;border-radius:12px;padding:18px 24px;display:flex;align-items:center;gap:0;">
@@ -319,9 +328,10 @@
         </div>
       </div>
     </div>
-
-    <!-- 行李與報到提醒推到底部 -->
-    <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:14px 18px;" class="checklist-warning mt-auto">
+  </div>
+  
+  <div class="page-footer" style="margin-top: 30mm;">
+    <div style="background:#f0f4ff;border-left:4px solid #3a6fd8;border-radius:0 8px 8px 0;padding:14px 18px;" class="checklist-warning">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;font-family:'Helvetica Neue',sans-serif;color:#3a6fd8;margin-bottom:8px;">⚠️ 行李與報到提醒</div>
       <div style="font-size:13.5px;color:var(--ink-mid);font-family:'Helvetica Neue',sans-serif;line-height:2;">
         📄 &nbsp;請準備好<strong style="color:var(--ink);">護照</strong>，隨時備查。<br>
@@ -330,7 +340,6 @@
         📏 &nbsp;可伸縮自拍棒（收合後 &gt;60cm）須<strong style="color:var(--accent);">托運</strong>，勿誤放隨身行李。
       </div>
     </div>
-
   </div>
 </div><!-- /flight-page -->
 
@@ -353,7 +362,6 @@
     </div>
   </div>
 
-  <!-- Day 1: 將行程區塊間距拉開，底部貼底 -->
   <div class="page-body">
     <div class="mileage-summary" style="margin-bottom: 24px;">
       <div class="mile-chip">今日行駛 <strong>80 km</strong></div>
@@ -421,7 +429,7 @@
     </div>
   </div>
 
-  <div class="page-footer mt-auto">
+  <div class="page-footer" style="margin-top: 25mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>登別 石水亭</strong></span>
@@ -606,7 +614,7 @@
     </div>
   </div>
 
-  <div class="page-footer">
+  <div class="page-footer" style="margin-top: 15mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>洞爺觀光酒店</strong></span>
@@ -647,7 +655,7 @@
   </div>
   
   <div class="page-body">
-    <div class="mileage-summary" style="margin-bottom: 20px;">
+    <div class="mileage-summary" style="margin-bottom: 16px;">
       <div class="mile-chip">今日行駛 <strong>165 km</strong></div>
       <div class="mile-chip">累計里程 <strong>335 km</strong></div>
       <div class="mile-chip">⛽ 加油提醒 <strong>335 km</strong></div>
@@ -738,8 +746,7 @@
       </div>
     </div>
   </div>
-
-  <div class="page-footer mt-auto">
+  <div class="page-footer" style="margin-top: 10mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -906,7 +913,7 @@
     </div>
   </div>
   
-  <div class="page-footer">
+  <div class="page-footer" style="margin-top: 15mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1085,7 +1092,7 @@
     </div>
   </div>
   
-  <div class="page-footer">
+  <div class="page-footer" style="margin-top: 15mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Hotel Mystays 函館站前</strong></span>
@@ -1209,7 +1216,7 @@
     </div>
   </div>
   
-  <div class="page-footer mt-auto">
+  <div class="page-footer" style="margin-top: 10mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>Nord 小樽飯店</strong></span>
@@ -1644,7 +1651,7 @@
     </div>
   </div>
   
-  <div class="page-footer">
+  <div class="page-footer" style="margin-top: 15mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -1766,7 +1773,7 @@
     </div>
   </div>
   
-  <div class="page-footer mt-auto">
+  <div class="page-footer" style="margin-top: 25mm;">
     <div class="hotel-summary">
       <span>🏨</span>
       <span>今晚住宿：<strong>東急 STAY 札幌</strong></span>
@@ -1857,7 +1864,7 @@
         <div class="drive-details">
           <div class="drive-stat"><div class="drive-stat-label">車程時間</div><div class="drive-stat-value">2 分鐘</div></div>
           <div class="drive-stat"><div class="drive-stat-label">行車里程</div><div class="drive-stat-value">1 km</div></div>
-          <div class="drive-stat"><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">加油站 → HM 租車</div></div>
+          <div class="drive-stat"><div class="drive-stat-label">方向</div><div class="drive-stat-value" style="font-size:13px;padding-top:17px;">加油站 → HM 租車</div></div>
         </div>
       </div>
 
